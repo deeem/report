@@ -1,8 +1,7 @@
 <?php
 namespace App;
 
-abstract class Cell
+interface Cell
 {
-    abstract public function getValue();
-    abstract public function isEditable();
+    public function getValue();
 }

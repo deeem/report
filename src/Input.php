@@ -1,28 +1,12 @@
 <?php
 namespace App;
 
-class Input extends Cell
+abstract class Input implements Cell
 {
-    private $value = null;
-    private $editable = false;
-
-    public function setValue($val)
-    {
-        $this->value = $val;
-    }
+    abstract public function setValue($val);
 
     public function getValue()
     {
         return $this->value;
-    }
-
-    public function setEditable()
-    {
-        $this->editable = true;
-    }
-
-    public function isEditable()
-    {
-        return $this->editable;
     }
 }

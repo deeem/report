@@ -1,29 +1,24 @@
 <?php
 namespace App;
+
 require_once '/app/vendor/autoload.php';
 
-
-// - 
+// - доделать иерархию классов Cell
+// - базовый функционал класса Row
 // - читать из xml
 
+$row = [
+    new Label('1'),
+    new Label('Капитальный'),
+    new Text(4),
+    new Text(5),
+    new Blank(),
+    new Text(6),
+    new Select('ТО 1', ['ТО1', 'ТО 2'])
+];
 
-$cell1 = new Input();
-$cell1->setValue('Капитальный');
-$cell2 = new Skip();
-$cell3 = new Input();
-$cell3->setValue('2');
-$cell4 = new Input();
-$cell4->setValue('4');
-
-$row = new Row();
-$row->addCell($cell1);
-$row->addCell($cell2);
-$row->addCell($cell3);
-$row->addCell($cell4);
-
-$cells = $row->getCells();
-
-foreach($cells as $cell)
-{
-    echo "{$cell->getValue()} ";
+foreach ($row as $cell) {
+    echo " {$cell->getValue()} |";
 }
+
+echo "\n";
