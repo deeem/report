@@ -3,7 +3,6 @@ namespace App;
 
 require_once '/app/vendor/autoload.php';
 
-// - доделать иерархию классов Cell
 // - базовый функционал класса Row
 // - читать из xml
 

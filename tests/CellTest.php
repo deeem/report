@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-namespace App;
 
 final class CellTest extends PHPUnit\Framework\TestCase
 {
