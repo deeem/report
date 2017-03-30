@@ -3,21 +3,42 @@ namespace App;
 
 require_once '/app/vendor/autoload.php';
 
-// - базовый функционал класса Row
-// - читать из xml
+$factory = new CellFactory();
 
-$row = [
-    new Label('1'),
-    new Label('Капитальный'),
-    new Text(4),
-    new Text(5),
-    new Blank(),
-    new Text(6),
-    new Select('ТО 1', ['ТО1', 'ТО 2'])
-];
+// INIT
 
-foreach ($row as $cell) {
-    echo " {$cell->getValue()} |";
-}
+$collection = $factory->create('4b875873', 'composite');
+$collection->add($factory->create('22305e2b', 'input')->setValue(1));
+$collection->add($factory->create('8f8709df', 'input')->setValue(2));
+$collection->add(
+    $factory->create('7f2a2c2a', 'select')
+    ->setOptions(['foo', 'bar'])
+    ->setValue('foo')
+);
 
-echo "\n";
+$subCollection = $factory->create('eeb9eda1', 'composite');
+$subCollection->add($factory->create('93836c77', 'input'));
+$subCollection->add($factory->create('ee0bf9d6', 'input'));
+$subCollection->add(
+    $factory->create('04ca8335', 'select')
+    ->setOptions(['ТО-1', 'ТО-2'])
+);
+
+$collection->add($subCollection);
+
+// INPUT
+
+$collection->getCellByPath('eeb9eda1_93836c77')->setValue(3);
+$collection->getCellByPath('eeb9eda1_ee0bf9d6')->setValue(4);
+$collection->getCellByPath('eeb9eda1_04ca8335')->setValue('ТО-2');
+
+// OUTPUT
+
+echo "Показатели прошлого периода\n";
+echo 'План: ' . $collection->getCellByPath('22305e2b')->getValue() . "\n";
+echo 'Факт: ' . $collection->getCellByPath('8f8709df')->getValue() . "\n";
+echo 'Тип: ' . $collection->getCellByPath('7f2a2c2a')->getValue() . "\n";
+echo "Показатели текущего периода\n";
+echo 'План: ' . $collection->getCellByPath('eeb9eda1_93836c77')->getValue() . "\n";
+echo 'Факт: ' . $collection->getCellByPath('eeb9eda1_ee0bf9d6')->getValue() . "\n";
+echo 'Тип: ' . $collection->getCellByPath('eeb9eda1_04ca8335')->getValue() . "\n";

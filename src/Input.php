@@ -1,9 +1,16 @@
 <?php
 namespace App;
 
-abstract class Input implements Cell
+class Input extends Cell
 {
-    abstract public function setValue($val);
+    private $value;
+
+    public function setValue($value): Cell
+    {
+        $this->value = $value;
+
+        return $this;
+    }
 
     public function getValue()
     {

@@ -1,28 +1,31 @@
 <?php
 namespace App;
 
-class Select extends Input
+class Select extends Cell
 {
     private $value;
-    private $options;
+    private $options = [];
 
-    public function __construct($val = null, $options = [])
+    public function setValue($value): Cell
     {
-        $this->options = $options;
-        $this->setValue($val);
-    }
-
-    public function setValue($value)
-    {
-        if (in_array($value, $this->options)) {
-            $this->value = $value;
-        } else {
+        if (! in_array($value, $this->options)) {
             throw new CellException('Select type: value not in options list');
         }
+
+        $this->value = $value;
+
+        return $this;
     }
 
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function setOptions(array $options = []): Cell
+    {
+        $this->options = $options;
+
+        return $this;
     }
 }

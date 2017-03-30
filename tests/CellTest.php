@@ -1,36 +1,42 @@
 <?php
 declare(strict_types=1);
+namespace App;
 
-final class CellTest extends PHPUnit\Framework\TestCase
+final class CellTest extends \PHPUnit\Framework\TestCase
 {
-    public function testLabelGetValue()
+    protected $factory;
+    protected $input;
+    protected $select;
+
+    public function setUp()
     {
-        $cell = new App\Label('foo');
-        $this->assertEquals('foo', $cell->getValue());
+        $this->factory = new CellFactory();
+        $this->input = $this->factory->create('5d84e373', 'input');
+        $this->select = $this->factory->create('c1f80055', 'select');
     }
 
-    public function testTextSetValue()
+    public function testCellGetId()
     {
-        $cell = new App\Text();
-        $cell->setValue(5);
-        $this->assertEquals(5, $cell->getValue());
+        $this->assertEquals('5d84e373', $this->input->getId());
     }
 
-    public function testBlankGetValue()
+    public function testInputSetGetValue()
     {
-        $cell = new App\Blank();
-        $this->assertNull($cell->getValue());
+        $this->input->setValue(5);
+        $this->assertEquals(5, $this->input->getValue());
     }
 
-    public function testSelectSetValue()
+    public function testSelectSetGetValue()
     {
-        $cell = new App\Select('foo', ['foo', 'bar']);
-        $this->assertEquals('foo', $cell->getValue());
+        $this->select->setOptions(['foo', 'bar']);
+        $this->select->setValue('foo');
+        $this->assertEquals('foo', $this->select->getValue());
     }
 
-    public function testSelectSetValueException()
+    public function testSelectInvalidValueException()
     {
-        $this->expectException(App\CellException::class);
-        $cell = new App\Select('buzz', ['foo', 'bar']);
+        $this->select->setOptions(['foo', 'bar']);
+        $this->expectException(CellException::class);
+        $this->select->setValue('baz');
     }
 }
