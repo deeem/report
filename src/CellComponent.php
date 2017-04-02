@@ -16,7 +16,6 @@ abstract class CellComponent
     }
 
     abstract public function add(CellComponent $component);
-    abstract public function getCellByPath(string $path): Cell;
-    abstract public function setValue($value): Cell;
+    abstract public function getCellByPath(string $path): Cell;    
     abstract public function getValue();
 }

@@ -26,11 +26,6 @@ class CellComposite extends CellComponent
         throw new CellException('Cell not found');
     }
 
-    public function setValue($value): Cell
-    {
-        throw new CellException("Can't set value to Composite");
-    }
-
     public function getValue()
     {
         throw new CellException("Can't get value from Composite");
