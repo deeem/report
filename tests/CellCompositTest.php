@@ -25,12 +25,6 @@ final class CellCompositTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(CellComposite::class, $composite);
     }
 
-    public function testAddChildToCell()
-    {
-        $this->expectException(CellException::class);
-        $this->input->add($this->select);
-    }
-
     public function testAddChildToComposite()
     {
         $composite = new CellComposite('4b875873');

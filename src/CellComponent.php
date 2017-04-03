@@ -15,7 +15,9 @@ abstract class CellComponent
         return $this->id;
     }
 
-    abstract public function add(CellComponent $component);
-    abstract public function getCellByPath(string $path): Cell;    
-    abstract public function getValue();
+    public function isComposite(): CellComponent
+    {
+        return null;
+    }
+
 }

@@ -5,6 +5,11 @@ class CellComposite extends CellComponent
 {
     protected $children = [];
 
+    public function isComposite(): CellComponent
+    {
+        return $this;
+    }
+
     public function add(CellComponent $component)
     {
         $this->children[$component->getId()] = $component;
@@ -24,10 +29,5 @@ class CellComposite extends CellComponent
         }
 
         throw new CellException('Cell not found');
-    }
-
-    public function getValue()
-    {
-        throw new CellException("Can't get value from Composite");
     }
 }
