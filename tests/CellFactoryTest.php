@@ -65,8 +65,8 @@ final class CellFactoryTest extends \PHPUnit\Framework\TestCase
             ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['foo', 'bar'], 'value' => 'foo']]
         ];
         $this->factory->append($collection, $template);
-        
-        $this->assertEquals($collection->getCellByPath('22305e2b')->getValue(), 1);
-        $this->assertEquals($collection->getCellByPath('7f2a2c2a')->getValue(), 'foo');
+
+        $this->assertEquals($collection->getChild('22305e2b')->getValue(), 1);
+        $this->assertEquals($collection->getChild('7f2a2c2a')->getValue(), 'foo');
     }
 }

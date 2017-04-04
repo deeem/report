@@ -7,6 +7,11 @@ abstract class CellComponent
 
     public function __construct($id)
     {
+        $this->setId($id);
+    }
+
+    protected function setId($id)
+    {
         $this->id = $id;
     }
 

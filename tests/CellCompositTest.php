@@ -29,7 +29,7 @@ final class CellCompositTest extends \PHPUnit\Framework\TestCase
     {
         $composite = new CellComposite('4b875873');
         $composite->add($this->input);
-        $this->assertEquals($this->input, $composite->getCellByPath('5d84e373'));
+        $this->assertEquals($this->input, $composite->getChild('5d84e373'));
     }
 
     public function testAddChildWithExistingIdToComposite()
@@ -38,12 +38,12 @@ final class CellCompositTest extends \PHPUnit\Framework\TestCase
         $composite->add($this->factory->create('93836c77', 'input', ['value'=>'foo']));
         $composite->add($this->factory->create('93836c77', 'input', ['value'=>'bar']));
         $composite->add($this->factory->create('93836c77', 'input', ['value'=>'baz']));
-        $this->assertEquals('foo', $composite->getCellByPath('93836c77')->getValue());
-        $this->assertEquals('bar', $composite->getCellByPath('93836c771')->getValue());
-        $this->assertEquals('baz', $composite->getCellByPath('93836c772')->getValue());
+        $this->assertEquals('foo', $composite->getChild('93836c77')->getValue());
+        $this->assertEquals('bar', $composite->getChild('93836c771')->getValue());
+        $this->assertEquals('baz', $composite->getChild('93836c772')->getValue());
     }
 
-    public function testGetCellByPath()
+    public function testGetChildByPath()
     {
         $composite1 = new CellComposite('4b875873');
         $composite2 = new CellComposite('eeb9eda1');
@@ -51,15 +51,15 @@ final class CellCompositTest extends \PHPUnit\Framework\TestCase
         $composite1->add($composite2);
         $this->assertEquals(
             $this->input,
-            $composite1->getCellByPath('eeb9eda1_5d84e373')
+            $composite1->getChildByPath('eeb9eda1_5d84e373')
         );
     }
 
-    public function testGetCellByPathCellNotFoundException()
+    public function testGetChildByPathCellNotFoundException()
     {
         $composite = new CellComposite('4b875873');
         $composite->add($this->input);
         $this->expectException(CellException::class);
-        $composite->getCellByPath('foo');
+        $composite->getChildByPath('foo');
     }
 }
