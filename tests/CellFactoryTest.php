@@ -19,12 +19,28 @@ final class CellFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testCanFactoryCreateInputWithOptions()
+    {
+        $input = $this->factory->create('5d84e373', 'input', ['value'=>'foo']);
+        $this->assertEquals('foo', $input->getValue());
+    }
+
     public function testCanFactoryCreateSelect()
     {
         $this->assertInstanceOf(
             Select::class,
             $this->factory->create('c1f80055', 'select')
         );
+    }
+
+    public function testCanFactoryCreateSelectWithOptions()
+    {
+        $select = $this->factory->create(
+            'c1f80055',
+            'select',
+            ['options'=>['foo', 'bar'], 'value'=>'foo']
+        );
+        $this->assertEquals('foo', $select->getValue());
     }
 
     public function testCanFactoryCreateComposite()
@@ -39,5 +55,18 @@ final class CellFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(CellException::class);
         $this->factory->create('5d84e373', 'foo');
+    }
+
+    public function testCanAppendCellsToCollectionFromTemplate()
+    {
+        $collection = $this->factory->create('4b875873', 'composite');
+        $template = [
+            ['id' => '22305e2b', 'type' => 'input', 'options' => ['value' => 1]],
+            ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['foo', 'bar'], 'value' => 'foo']]
+        ];
+        $this->factory->append($collection, $template);
+        
+        $this->assertEquals($collection->getCellByPath('22305e2b')->getValue(), 1);
+        $this->assertEquals($collection->getCellByPath('7f2a2c2a')->getValue(), 'foo');
     }
 }

@@ -19,5 +19,4 @@ abstract class CellComponent
     {
         return null;
     }
-
 }

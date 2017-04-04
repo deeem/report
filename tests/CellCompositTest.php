@@ -32,6 +32,17 @@ final class CellCompositTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->input, $composite->getCellByPath('5d84e373'));
     }
 
+    public function testAddChildWithExistingIdToComposite()
+    {
+        $composite = new CellComposite('4b875873');
+        $composite->add($this->factory->create('93836c77', 'input', ['value'=>'foo']));
+        $composite->add($this->factory->create('93836c77', 'input', ['value'=>'bar']));
+        $composite->add($this->factory->create('93836c77', 'input', ['value'=>'baz']));
+        $this->assertEquals('foo', $composite->getCellByPath('93836c77')->getValue());
+        $this->assertEquals('bar', $composite->getCellByPath('93836c771')->getValue());
+        $this->assertEquals('baz', $composite->getCellByPath('93836c772')->getValue());
+    }
+
     public function testGetCellByPath()
     {
         $composite1 = new CellComposite('4b875873');
