@@ -20,7 +20,7 @@ abstract class CellComponent
         return $this->id;
     }
 
-    public function isComposite(): CellComponent
+    public function getComposite(): CellComponent
     {
         return null;
     }

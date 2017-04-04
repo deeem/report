@@ -5,7 +5,7 @@ class CellComposite extends CellComponent
 {
     protected $children = [];
 
-    public function isComposite(): CellComponent
+    public function getComposite(): CellComponent
     {
         return $this;
     }
