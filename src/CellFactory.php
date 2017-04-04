@@ -29,6 +29,15 @@ class CellFactory
                 return $select;
             case 'composite':
                 return new CellComposite($id);
+            case 'summary':
+                $summary = new Summary($id);
+                if (empty($options)) {
+                    return $summary;
+                }
+                if (array_key_exists('paths', $options)) {
+                    $summary->setPaths($options['paths']);
+                }
+                return $summary;
             default:
                 throw new CellException('Invalid Cell type');
         }

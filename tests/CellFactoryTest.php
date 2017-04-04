@@ -43,6 +43,14 @@ final class CellFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('foo', $select->getValue());
     }
 
+    public function testCanFactoryCreateSummary()
+    {
+        $this->assertInstanceOf(
+            Summary::class,
+            $this->factory->create('c1f80055', 'summary')
+        );
+    }
+
     public function testCanFactoryCreateComposite()
     {
         $this->assertInstanceOf(

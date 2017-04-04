@@ -39,4 +39,14 @@ final class CellTest extends \PHPUnit\Framework\TestCase
         $this->expectException(CellException::class);
         $this->select->setValue('baz');
     }
+
+    public function testSummaryGetValue()
+    {
+        $collection = $this->factory->create('4b875873', 'composite');
+        $collection->add($this->factory->create('22305e2b', 'input', ['value' => 5]));
+        $collection->add($this->factory->create('8f8709df', 'input', ['value' => 7]));
+        $collection->add($this->factory->create('04ca8335', 'summary', ['paths' => ['22305e2b','8f8709df']]));
+
+        $this->assertEquals(12, $collection->getChild('04ca8335')->getValue());
+    }
 }

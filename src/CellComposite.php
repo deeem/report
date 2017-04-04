@@ -12,6 +12,7 @@ class CellComposite extends CellComponent
 
     public function add(CellComponent $component)
     {
+        $component->setParent($this);
         $id = $component->getId();
 
         if ($this->hasChild($id)) {
