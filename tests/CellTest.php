@@ -49,4 +49,18 @@ final class CellTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(12, $collection->getChild('04ca8335')->getValue());
     }
+
+    public function testPercentageGetValue()
+    {
+        $collection = $this->factory->create('4b875873', 'composite');
+        $collection->add($this->factory->create('22305e2b', 'input', ['value' => 2]));
+        $collection->add($this->factory->create('8f8709df', 'input', ['value' => 4]));
+        $collection->add($this->factory->create(
+            '04ca8335',
+            'percentage',
+            ['part' => '22305e2b', 'whole' =>'8f8709df']
+        ));
+
+        $this->assertEquals(50, $collection->getChild('04ca8335')->getValue());
+    }
 }

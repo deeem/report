@@ -51,6 +51,14 @@ final class CellFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testCanFactoryCreatePercentage()
+    {
+        $this->assertInstanceOf(
+            Percentage::class,
+            $this->factory->create('c1f80055', 'percentage')
+        );
+    }
+
     public function testCanFactoryCreateComposite()
     {
         $this->assertInstanceOf(

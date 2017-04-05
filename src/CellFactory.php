@@ -38,6 +38,17 @@ class CellFactory
                     $summary->setPaths($options['paths']);
                 }
                 return $summary;
+            case 'percentage':
+                $percentage = new Percentage($id);
+                if (empty($options)) {
+                    return $percentage;
+                }
+                if (array_key_exists('part', $options) &&
+                    array_key_exists('whole', $options)
+                ) {
+                        $percentage->setPaths($options['part'], $options['whole']);
+                }
+                return $percentage;
             default:
                 throw new CellException('Invalid Cell type');
         }
