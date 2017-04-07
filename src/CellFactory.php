@@ -53,21 +53,4 @@ class CellFactory
                 throw new CellException('Invalid Cell type');
         }
     }
-
-    /*
-     * $template = [
-     *  ['id' => '1', 'type' => 'input', 'options' => ['value' => 1]],
-     *  ['id' => '2', 'type' => 'select', 'options' => ['options' => ['foo', 'bar'], 'value' => 'foo']],
-     * ]
-     */
-    public function append(CellComposite $collection, array $template = [])
-    {
-        if (empty($template)) {
-            return;
-        }
-
-        foreach ($template as $cell) {
-            $collection->add($this->create($cell['id'], $cell['type'], $cell['options']));
-        }
-    }
 }

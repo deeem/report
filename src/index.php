@@ -5,49 +5,63 @@ require_once '/app/vendor/autoload.php';
 
 $factory = new CellFactory();
 
-// INIT
+// DATA
 
-$collection = $factory->create('4b875873', 'composite');
-$collection->add($factory->create('22305e2b', 'input', ['value' => 1]));
-$collection->add($factory->create('8f8709df', 'input', ['value' => 2]));
-$collection->add(
-    $factory->create('7f2a2c2a', 'select', ['options' => ['ТО-1', 'ТО-2'], 'value' => 'ТО-1'])
-);
+$sheet = [
+    ['id' => '22305e2b', 'type' => 'input'],
+    ['id' => '8f8709df', 'type' => 'input'],
+    ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2']]],
+    ['id' => '3ea48e03', 'type' => 'percentage', 'options' => ['part' => '22305e2b', 'whole' => '8f8709df']]
+];
 
-$template = [
+$addTemplate = [
+    ['id' => '22305e2b', 'type' => 'input'],
+    ['id' => '8f8709df', 'type' => 'input'],
+    ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2']]]
+];
+
+$report = [
     ['id' => '22305e2b', 'type' => 'input', 'options' => ['value' => 1]],
     ['id' => '8f8709df', 'type' => 'input', 'options' => ['value' => 2]],
-    ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2'], 'value' => 'ТО-1']]
+    ['id' => 'cd9ac8a9', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2'], 'value' => 'ТО-1']],
+    ['id' => '3ea48e03', 'type' => 'percentage', 'options' => ['part' => '22305e2b', 'whole' => '8f8709df']]
 ];
-$factory->append($collection, $template);
 
-$subCollection = $factory->create('eeb9eda1', 'composite');
-$subCollection->add($factory->create('93836c77', 'input'));
-$subCollection->add($factory->create('ee0bf9d6', 'input'));
-$subCollection->add(
-    $factory->create('04ca8335', 'select', ['options' => ['ТО-1', 'ТО-2']])
-);
+// INIT
 
-$collection->add($subCollection);
+$previousReport = $factory->create('4b875873', 'composite');
+$previousReport->append($report);
+
+$currentReport = $factory->create('eeb9eda1', 'composite');
+$currentReport->append($sheet);
+$currentReport->registerTemplate('feb1ac70', $addTemplate);
+
+$reports = $factory->create('56729d6f', 'composite');
+$reports->addChild($previousReport);
+$reports->addChild($currentReport);
 
 // INPUT
 
-$collection->getChildByPath('eeb9eda1_93836c77')->setValue(3);
-$collection->getChildByPath('eeb9eda1_ee0bf9d6')->setValue(4);
-$collection->getChildByPath('eeb9eda1_04ca8335')->setValue('ТО-2');
+$reports->getChildByPath('eeb9eda1_22305e2b')->setValue(3);
+$reports->getChildByPath('eeb9eda1_8f8709df')->setValue(4);
+$reports->getChildByPath('eeb9eda1_7f2a2c2a')->setValue('ТО-2');
+$reports->getChild('eeb9eda1')->appendFromTemplate('feb1ac70');
+$reports->getChildByPath('eeb9eda1_22305e2b1')->setValue(5);
+$reports->getChildByPath('eeb9eda1_8f8709df1')->setValue(6);
+$reports->getChildByPath('eeb9eda1_7f2a2c2a1')->setValue('ТО-1');
 
 // OUTPUT
 
 echo "Показатели прошлого периода\n";
-echo 'План: ' . $collection->getChild('22305e2b')->getValue() . " | ";
-echo 'Факт: ' . $collection->getChild('8f8709df')->getValue() . " | ";
-echo 'Тип: ' . $collection->getChild('7f2a2c2a')->getValue() . "\n";
-
-echo 'План: ' . $collection->getChild('22305e2b1')->getValue() . " | ";
-echo 'Факт: ' . $collection->getChild('8f8709df1')->getValue() . " | ";
-echo 'Тип: ' . $collection->getChild('7f2a2c2a1')->getValue() . "\n";
+echo 'План: ' . $reports->getChildByPath('4b875873_22305e2b')->getValue() . " | ";
+echo 'Факт: ' . $reports->getChildByPath('4b875873_8f8709df')->getValue() . " | ";
+echo 'Тип: ' . $reports->getChildByPath('4b875873_cd9ac8a9')->getValue() . " | ";
+echo '%: ' . $reports->getChildByPath('4b875873_3ea48e03')->getValue(). "\n";
 
 echo "Показатели текущего периода\n";
-echo 'План: ' . $collection->getChildByPath('eeb9eda1_93836c77')->getValue() . " | ";
-echo 'Факт: ' . $collection->getChildByPath('eeb9eda1_ee0bf9d6')->getValue() . " | ";
-echo 'Тип: ' . $collection->getChildByPath('eeb9eda1_04ca8335')->getValue() . "\n";
+echo 'План: ' . $reports->getChildByPath('eeb9eda1_22305e2b')->getValue() . " | ";
+echo 'Факт: ' . $reports->getChildByPath('eeb9eda1_8f8709df')->getValue() . " | ";
+echo 'Тип: ' . $reports->getChildByPath('eeb9eda1_7f2a2c2a')->getValue() . "\n";
+echo 'План: ' . $reports->getChildByPath('eeb9eda1_22305e2b1')->getValue() . " | ";
+echo 'Факт: ' . $reports->getChildByPath('eeb9eda1_8f8709df1')->getValue() . " | ";
+echo 'Тип: ' . $reports->getChildByPath('eeb9eda1_7f2a2c2a1')->getValue() . "\n";

@@ -4,13 +4,46 @@ namespace App;
 class CellComposite extends CellComponent
 {
     protected $children = [];
+    protected $templates = [];
 
     public function getComposite(): CellComponent
     {
         return $this;
     }
 
-    public function add(CellComponent $component)
+    public function addChild(CellComponent $component)
+    {
+        $this->add($component);
+    }
+
+    public function append(array $template)
+    {
+        $factory = new CellFactory();
+
+        if (empty($template)) {
+            throw new CellException('Template is empty');
+        }
+
+        foreach ($template as $item) {
+            if (isset($item['options']) && is_array($item['options'])) {
+                $this->add($factory->create($item['id'], $item['type'], $item['options']));
+            } else {
+                $this->add($factory->create($item['id'], $item['type']));
+            }
+        }
+    }
+
+    public function registerTemplate($id, array $template)
+    {
+        $this->templates[$id] = $template;
+    }
+
+    public function appendFromTemplate($id)
+    {
+        $this->append($this->templates[$id]);
+    }
+
+    protected function add(CellComponent $component)
     {
         $component->setParent($this);
         $id = $component->getId();

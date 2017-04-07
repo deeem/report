@@ -43,9 +43,9 @@ final class CellTest extends \PHPUnit\Framework\TestCase
     public function testSummaryGetValue()
     {
         $collection = $this->factory->create('4b875873', 'composite');
-        $collection->add($this->factory->create('22305e2b', 'input', ['value' => 5]));
-        $collection->add($this->factory->create('8f8709df', 'input', ['value' => 7]));
-        $collection->add($this->factory->create('04ca8335', 'summary', ['paths' => ['22305e2b','8f8709df']]));
+        $collection->addChild($this->factory->create('22305e2b', 'input', ['value' => 5]));
+        $collection->addChild($this->factory->create('8f8709df', 'input', ['value' => 7]));
+        $collection->addChild($this->factory->create('04ca8335', 'summary', ['paths' => ['22305e2b','8f8709df']]));
 
         $this->assertEquals(12, $collection->getChild('04ca8335')->getValue());
     }
@@ -53,9 +53,9 @@ final class CellTest extends \PHPUnit\Framework\TestCase
     public function testPercentageGetValue()
     {
         $collection = $this->factory->create('4b875873', 'composite');
-        $collection->add($this->factory->create('22305e2b', 'input', ['value' => 2]));
-        $collection->add($this->factory->create('8f8709df', 'input', ['value' => 4]));
-        $collection->add($this->factory->create(
+        $collection->addChild($this->factory->create('22305e2b', 'input', ['value' => 2]));
+        $collection->addChild($this->factory->create('8f8709df', 'input', ['value' => 4]));
+        $collection->addChild($this->factory->create(
             '04ca8335',
             'percentage',
             ['part' => '22305e2b', 'whole' =>'8f8709df']
