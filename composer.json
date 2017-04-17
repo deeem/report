@@ -1,7 +1,11 @@
 {
+  "require": {
+    "symfony/yaml": "3.2.*"
+  },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.*",
-    "psy/psysh":">=0.7.2-stable"
+    "psy/psysh":">=0.7.2-stable",
+    "symfony/console": "3.2.*"
   },
   "autoload": {
     "psr-4": {
