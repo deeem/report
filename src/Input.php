@@ -1,11 +1,11 @@
 <?php
 namespace App;
 
-class Input extends Cell
+class Input extends Primitive
 {
     private $value;
 
-    public function setValue($value): Cell
+    public function setValue($value): Primitive
     {
         $this->value = $value;
 

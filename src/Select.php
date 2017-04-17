@@ -1,12 +1,12 @@
 <?php
 namespace App;
 
-class Select extends Cell
+class Select extends Primitive
 {
     private $value;
     private $options = [];
 
-    public function setValue($value): Cell
+    public function setValue($value): Primitive
     {
         if (! in_array($value, $this->options)) {
             throw new CellException('Select type: value not in options list');
@@ -22,7 +22,7 @@ class Select extends Cell
         return $this->value;
     }
 
-    public function setOptions(array $options = []): Cell
+    public function setOptions(array $options = []): Primitive
     {
         $this->options = $options;
 

@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-class Percentage extends Cell
+class Percentage extends Primitive
 {
     protected $part;
     protected $whole;
@@ -16,7 +16,7 @@ class Percentage extends Cell
     {
         $parent = $this->getParent();
 
-        return $parent->getChild($this->part)->getValue() /
-        $parent->getChild($this->whole)->getValue() * 100;
+        return $parent->find($this->part)->getValue() /
+        $parent->find($this->whole)->getValue() * 100;
     }
 }

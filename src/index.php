@@ -3,65 +3,69 @@ namespace App;
 
 require_once '/app/vendor/autoload.php';
 
-$factory = new CellFactory();
+error_reporting(E_ALL);
 
 // DATA
 
-$sheet = [
-    ['id' => '22305e2b', 'type' => 'input'],
-    ['id' => '8f8709df', 'type' => 'input'],
-    ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2']]],
-    ['id' => '3ea48e03', 'type' => 'percentage', 'options' => ['part' => '22305e2b', 'whole' => '8f8709df']]
-];
-
-$addTemplate = [
-    ['id' => '22305e2b', 'type' => 'input'],
-    ['id' => '8f8709df', 'type' => 'input'],
-    ['id' => '7f2a2c2a', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2']]]
-];
-
 $report = [
-    ['id' => '22305e2b', 'type' => 'input', 'options' => ['value' => 1]],
-    ['id' => '8f8709df', 'type' => 'input', 'options' => ['value' => 2]],
-    ['id' => 'cd9ac8a9', 'type' => 'select', 'options' => ['options' => ['ТО-1', 'ТО-2'], 'value' => 'ТО-1']],
-    ['id' => '3ea48e03', 'type' => 'percentage', 'options' => ['part' => '22305e2b', 'whole' => '8f8709df']]
+    'name' => '4b875873',
+    'elements' => [
+        ['name' => '22305e2b', 'type' => 'input', 'params' => ['value' => 1]],
+        ['name' => '8f8709df', 'type' => 'input', 'params' => ['value' => 2]],
+        ['name' => 'cd9ac8a9', 'type' => 'select', 'params' => [
+            'options' => ['ТО-1', 'ТО-2'],
+            'value' => 'ТО-1']
+        ],
+        ['name' => 'summa' , 'type' => 'summary', 'params' => ['paths' => ['22305e2b', '8f8709df']]],
+        ['name' => '07ff3925', 'type' => 'percentage', 'params' => ['part' => '22305e2b', 'whole' => '8f8709df']],
+        ['name' => 'eeb9eda1', 'type' => 'collection', 'params' => ['elements' => [
+            ['name' => '10ce46d7', 'type' => 'input', 'params' => ['value' => 57]],
+            ['name' => 'd38a1eb4', 'type' => 'input', 'params' => ['value' => 54]],
+            ]
+        ]],
+        ['name' => '726522a4', 'type' => 'template', 'params' => ['elements' => [
+            ['name' => 'fb03f80b', 'type' => 'input', 'params' => ['value' => 100]],
+            ['name' => '05ac5826', 'type' => 'input', 'params' => ['value' => 101]],
+            ]
+        ]],
+    ]
 ];
 
 // INIT
 
-$previousReport = $factory->create('4b875873', 'composite');
-$previousReport->append($report);
-
-$currentReport = $factory->create('eeb9eda1', 'composite');
-$currentReport->append($sheet);
-$currentReport->registerTemplate('feb1ac70', $addTemplate);
-
-$reports = $factory->create('56729d6f', 'composite');
-$reports->addChild($previousReport);
-$reports->addChild($currentReport);
+$builder = new CollectionBuilder();
+$builder->setName('4b875873');
+$collection = (new CollectionDirector())->build($builder, $report['elements']);
 
 // INPUT
 
-$reports->getChildByPath('eeb9eda1_22305e2b')->setValue(3);
-$reports->getChildByPath('eeb9eda1_8f8709df')->setValue(4);
-$reports->getChildByPath('eeb9eda1_7f2a2c2a')->setValue('ТО-2');
-$reports->getChild('eeb9eda1')->appendFromTemplate('feb1ac70');
-$reports->getChildByPath('eeb9eda1_22305e2b1')->setValue(5);
-$reports->getChildByPath('eeb9eda1_8f8709df1')->setValue(6);
-$reports->getChildByPath('eeb9eda1_7f2a2c2a1')->setValue('ТО-1');
+$collection->find('22305e2b')->setValue(5);
+$collection->find('8f8709df')->setValue(20);
+$collection->find('cd9ac8a9')->setValue('ТО-2');
+$collection->find('eeb9eda1')->find('10ce46d7')->setValue(15);
+$collection->find('eeb9eda1')->find('d38a1eb4')->setValue(150);
+
+$generated = $collection->find('726522a4')->generate();
+$generated->find('fb03f80b')->setValue(40);
+$generated->find('05ac5826')->setValue(42);
 
 // OUTPUT
 
-echo "Показатели прошлого периода\n";
-echo 'План: ' . $reports->getChildByPath('4b875873_22305e2b')->getValue() . " | ";
-echo 'Факт: ' . $reports->getChildByPath('4b875873_8f8709df')->getValue() . " | ";
-echo 'Тип: ' . $reports->getChildByPath('4b875873_cd9ac8a9')->getValue() . " | ";
-echo '%: ' . $reports->getChildByPath('4b875873_3ea48e03')->getValue(). "\n";
-
 echo "Показатели текущего периода\n";
-echo 'План: ' . $reports->getChildByPath('eeb9eda1_22305e2b')->getValue() . " | ";
-echo 'Факт: ' . $reports->getChildByPath('eeb9eda1_8f8709df')->getValue() . " | ";
-echo 'Тип: ' . $reports->getChildByPath('eeb9eda1_7f2a2c2a')->getValue() . "\n";
-echo 'План: ' . $reports->getChildByPath('eeb9eda1_22305e2b1')->getValue() . " | ";
-echo 'Факт: ' . $reports->getChildByPath('eeb9eda1_8f8709df1')->getValue() . " | ";
-echo 'Тип: ' . $reports->getChildByPath('eeb9eda1_7f2a2c2a1')->getValue() . "\n";
+echo 'План: ' . $collection->find('22305e2b')->getValue() . " | ";
+echo 'Факт: ' . $collection->find('8f8709df')->getValue() . " | ";
+echo 'Сумм: ' . $collection->find('summa')->getValue() . " | ";
+echo 'в %:  ' . $collection->find('07ff3925')->getValue() . " | ";
+echo 'Тип:  ' . $collection->find('cd9ac8a9')->getValue() . "\n\n";
+echo 'Задействовано сотрудников: ' .
+$collection->findNested(['eeb9eda1', '10ce46d7'])->getValue() . "\n";
+echo 'Человекочасов: ' .
+$collection->findNested(['eeb9eda1', 'd38a1eb4'])->getValue() . "\n";
+
+echo "Стоимость по дням:\n";
+$daily = $collection->find('726522a4')->getChildren();
+foreach ($daily as $day) {
+    foreach ($day->getChildren() as $item) {
+        echo $item->getValue() . " у.е.\n";
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-class Summary extends Cell
+class Summary extends Primitive
 {
     protected $paths = [];
 
@@ -15,7 +15,7 @@ class Summary extends Cell
         $parent = $this->getParent();
 
         return array_reduce($this->paths, function ($carry, $item) use ($parent) {
-            return $carry + $parent->getChild($item)->getValue();
+            return $carry + $parent->find($item)->getValue();
         }, 0);
     }
 }
