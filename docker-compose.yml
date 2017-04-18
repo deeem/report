@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+   db:
+     image: mysql:5.7
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: secret
+       MYSQL_DATABASE: report
+       MYSQL_USER: report
+       MYSQL_PASSWORD: secret
+
+   app:
+     depends_on:
+       - db
+     links:
+       - db:mysql
+     build: ./docker
+     volumes:
+       - .:/app
+     ports:
+       - "8000:8000"
+     restart: always
+
+   pma:
+     image: phpmyadmin/phpmyadmin
+     depends_on:
+       - db
+     links:
+       - db:mysql
+     ports:
+       - "8081:80"
+     environment:
+       PMA_HOST: mysql
+       MYSQL_ROOT_PASSWORD: secret
+     restart: always
