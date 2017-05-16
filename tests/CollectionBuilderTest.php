@@ -15,7 +15,9 @@ final class CollectionBuilderTest extends \PHPUnit\Framework\TestCase
                 ['name' => '22305e2b', 'type' => 'input', 'params' => ['value' => 1]],
                 ['name' => '8f8709df', 'type' => 'input', 'params' => ['value' => 2]],
                 ['name' => 'de85a90a', 'type' => 'summary', 'params' => ['paths' => ['22305e2b','8f8709df']]],
-                ['name' => '07ff3925', 'type' => 'percentage', 'params' => ['part' => '22305e2b', 'whole' => '8f8709df']],
+                ['name' => '07ff3925', 'type' => 'percentage',
+                    'params' => ['part' => '22305e2b', 'whole' => '8f8709df']
+                ],
                 ['name' => 'cd9ac8a9', 'type' => 'select', 'params' => [
                     'options' => ['ТО-1', 'ТО-2'],
                     'value' => 'ТО-1']
