@@ -19,11 +19,9 @@ class Template extends Composite
     {
         $name = base_convert(hash('crc32b', microtime() + rand()), 16, 36);
 
-        $builder = new CollectionBuilder();
-        $builder->setName($name);
-        $collection = (new CollectionDirector())->build($builder, $this->template);
-        $this->addChild($collection);
+        $accumulation = (new AccumulationFactory())->make(['name' => $name, 'pile' => $this->template]);
+        $this->addChild($accumulation);
 
-        return $collection;
+        return $accumulation;
     }
 }

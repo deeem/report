@@ -8,8 +8,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->collection = new Collection();
-        $this->collection->setName('4b875873');
+        $this->collection = new Accumulation('4b875873');
     }
 
     public function testCollectionSetGetId()
@@ -24,7 +23,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckTemplateIsFixedAttribute()
     {
-        $template = new Template();
+        $template = new Template('4b875873');
 
         $this->assertFalse($template->isFixed());
     }
@@ -46,8 +45,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectionFindNested()
     {
-        $inner = new Collection();
-        $inner->setName('eeb9eda1');
+        $inner = new Accumulation('eeb9eda1');
         $inner->addChild(new Input('22305e2b'));
         $this->collection->addChild($inner);
 
@@ -56,8 +54,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectionFindNestedException()
     {
-        $inner = new Collection();
-        $inner->setName('eeb9eda1');
+        $inner = new Accumulation('eeb9eda1');
         $inner->addChild(new Input('22305e2b'));
         $this->collection->addChild($inner);
 
@@ -77,11 +74,9 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectionGetParent()
     {
-        $collection = new Collection();
-        $collection->setName('4b875873');
+        $collection = new Accumulation('4b875873');
         $collection->addChild(new Input('22305e2b'));
-        $subCollection = new Collection();
-        $subCollection->setName('eeb9eda1');
+        $subCollection = new Accumulation('eeb9eda1');
         $collection->addChild($subCollection);
         $nested = $collection->find('eeb9eda1');
         $nested->addChild(new Select('10ce46d7'));
@@ -102,8 +97,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
             ['name' => '05ac5826', 'type' => 'input', 'params' => ['value' => 101]],
         ];
 
-        $template = new Template();
-        $template->setName('726522a4');
+        $template = new Template('726522a4');
         $template->setTemplate($elements);
 
         $this->assertEmpty($template->getChildren());

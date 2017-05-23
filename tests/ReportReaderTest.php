@@ -11,13 +11,11 @@ final class ReportReaderTest extends \PHPUnit\Framework\TestCase
         $reader = new YamlReader($filename);
     }
 
-    public function testCanBuildParsedFile()
+    public function testCanBuildFromParsedFile()
     {
         $report = (new YamlReader('/app/tests/report.yml'))->parse();
-        $builder = new CollectionBuilder();
-        $builder->setName('4b875873');
-        $collection = (new CollectionDirector())->build($builder, $report['elements']);
+        $collection = (new AccumulationFactory)->make(['name' => $report['name'], 'pile' => $report['pile']]);
 
-        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertInstanceOf(Accumulation::class, $collection);
     }
 }

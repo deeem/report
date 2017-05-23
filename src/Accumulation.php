@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-class Collection extends Composite
+class Accumulation extends Composite
 {
     public function isFixed(): bool
     {

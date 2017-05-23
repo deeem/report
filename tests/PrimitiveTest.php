@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App;
 
-final class CellTest extends \PHPUnit\Framework\TestCase
+final class PrimitiveTest extends \PHPUnit\Framework\TestCase
 {
     public function testCellGetId()
     {
@@ -41,8 +41,7 @@ final class CellTest extends \PHPUnit\Framework\TestCase
         $input2->setValue(3);
         $summary = new Summary('summa');
         $summary->setPaths(['22305e2b', '8f8709df']);
-        $collection = new Collection();
-        $collection->setName('4b875873');
+        $collection = new Accumulation('4b875873');
         $collection->addChild($input1);
         $collection->addChild($input2);
         $collection->addChild($summary);
@@ -58,8 +57,7 @@ final class CellTest extends \PHPUnit\Framework\TestCase
         $input2->setValue(4);
         $summary = new Percentage('pct');
         $summary->setPaths('22305e2b', '8f8709df');
-        $collection = new Collection();
-        $collection->setName('4b875873');
+        $collection = new Accumulation('4b875873');
         $collection->addChild($input1);
         $collection->addChild($input2);
         $collection->addChild($summary);

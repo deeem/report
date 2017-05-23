@@ -11,9 +11,7 @@ $report = (new YamlReader('/app/tests/report.yml'))->parse();
 
 // INIT
 
-$builder = new CollectionBuilder();
-$builder->setName('4b875873');
-$collection = (new CollectionDirector())->build($builder, $report['elements']);
+$collection = (new AccumulationFactory())->make($report);
 
 // INPUT
 

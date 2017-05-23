@@ -1,59 +1,46 @@
 name: 4b875873
-elements:
+pile:
 
     - name: 22305e2b
       type: input
-      params:
-          value: 1
+      value: 1
 
     - name: 8f8709df
       type: input
-      params:
-          value: 2
+      value: 2
 
     - name: cd9ac8a9
       type: select
-      params:
-          options: ["ТО-1", "ТО-2"]
-          value: "ТО-1"
+      options: ["ТО-1", "ТО-2"]
+      value: "ТО-1"
 
     - name: summa
       type: summary
-      params:
-          paths: ["22305e2b", "8f8709df"]
+      paths: ["22305e2b", "8f8709df"]
 
     - name: 07ff3925
       type: percentage
-      params:
-          part: 22305e2b
-          whole: 8f8709df
+      part: 22305e2b
+      whole: 8f8709df
 
     - name: eeb9eda1
-      type: collection
-      params:
-          elements:
+      type: accumulation
+      pile:
+          - name: 10ce46d7
+            type: input
+            value: 57
 
-              - name: 10ce46d7
-                type: input
-                params:
-                    value: 57
-
-              - name: d38a1eb4
-                type: input
-                params:
-                    value: 54
+          - name: d38a1eb4
+            type: input
+            value: 54
 
     - name: 726522a4
       type: template
-      params:
-          elements:
+      pile:
+          - name: fb03f80b
+            type: input
+            value: 100
 
-              - name: fb03f80b
-                type: input
-                params:
-                    value: 100
-
-              - name: 05ac5826
-                type: input
-                params:
-                    value: 101
+          - name: 05ac5826
+            type: input
+            value: 101
