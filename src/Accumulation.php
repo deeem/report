@@ -31,4 +31,19 @@ class Accumulation extends Composite
 
         return empty($path) ? $child : $child->findNested($path);
     }
+
+    public function serialize()
+    {
+        $pile = [];
+
+        foreach ($this->children as $item) {
+            $pile[] = $item->serialize();
+        }
+
+        return [
+            'name' => $this->name,
+            'type' => 'accumulation',
+            'pile' => $pile
+        ];
+    }
 }

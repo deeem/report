@@ -98,7 +98,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
         ];
 
         $template = new Template('726522a4');
-        $template->setTemplate($elements);
+        $template->setSchema($elements);
 
         $this->assertEmpty($template->getChildren());
 

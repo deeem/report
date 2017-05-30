@@ -36,7 +36,7 @@ pile:
 
     - name: 726522a4
       type: template
-      pile:
+      schema:
           - name: fb03f80b
             type: input
             value: 100
@@ -44,3 +44,17 @@ pile:
           - name: 05ac5826
             type: input
             value: 101
+      pile:
+          - name: abce46d7
+            type: accumulation
+            pile:
+                - name: fb03f80b
+                  type: input
+                  value: 200
+
+          - name: defa1eb4
+            type: accumulation
+            pile:
+                - name: 05ac5826
+                  type: input
+                  value: 201

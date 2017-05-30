@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App;
 
-final class AccumulationBuilderTest extends \PHPUnit\Framework\TestCase
+final class AccumulationFactoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $accumulation;
 
@@ -20,10 +20,24 @@ final class AccumulationBuilderTest extends \PHPUnit\Framework\TestCase
                     ['name' => '10ce46d7', 'type' => 'input', 'value' => 57],
                     ['name' => 'd38a1eb4', 'type' => 'input', 'value' => 54],
                 ]],
-                ['name' => '726522a4', 'type' => 'template', 'pile' => [
-                    ['name' => 'fb03f80b', 'type' => 'input', 'value' => 100],
-                    ['name' => '05ac5826', 'type' => 'input', 'value' => 101],
-                ]],
+                [
+                    'name' => '726522a4',
+                    'type' => 'template',
+                    'schema' => [
+                        ['name' => 'fb03f80b', 'type' => 'input', 'value' => 100],
+                        ['name' => '05ac5826', 'type' => 'input', 'value' => 101]
+                    ],
+                    'pile' => [
+                        ['name' => 'abce46d7', 'type' => 'accumulation', 'pile' => [
+                            ['name' => 'fb03f80b', 'type' => 'input', 'value' => 200],
+                            ['name' => '05ac5826', 'type' => 'input', 'value' => 201]
+                        ]],
+                        ['name' => 'defa1eb4', 'type' => 'accumulation', 'pile' => [
+                            ['name' => 'fb03f80b', 'type' => 'input', 'value' => 300],
+                            ['name' => '05ac5826', 'type' => 'input', 'value' => 301]
+                        ]]
+                    ]
+                ],
             ]
         ];
 
@@ -67,6 +81,15 @@ final class AccumulationBuilderTest extends \PHPUnit\Framework\TestCase
         $nested = $this->accumulation->find('eeb9eda1')->getChildren();
 
         $this->assertInstanceOf(Input::class, $nested[0]);
+    }
+
+    public function testCanBuilderAppendInputNestedAccumulationInTemplate()
+    {
+        $nested = $this->accumulation->find('726522a4')->getChildren();
+        $this->assertInstanceOf(Input::class, $nested[0]->find('fb03f80b'));
+        $this->assertInstanceOf(Input::class, $nested[0]->find('05ac5826'));
+        $this->assertInstanceOf(Input::class, $nested[1]->find('fb03f80b'));
+        $this->assertInstanceOf(Input::class, $nested[1]->find('05ac5826'));
     }
 
     public function testCanBuilderAppendSummary()

@@ -19,4 +19,14 @@ class Percentage extends Primitive
         return $parent->find($this->part)->getValue() /
         $parent->find($this->whole)->getValue() * 100;
     }
+
+    public function serialize()
+    {
+        return [
+            'name' => $this->name,
+            'type' => 'percentage',
+            'part' => $this->part,
+            'whole' => $this->whole
+        ];
+    }
 }

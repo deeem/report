@@ -3,45 +3,72 @@ namespace App;
 
 require_once '/app/vendor/autoload.php';
 
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
+
 error_reporting(E_ALL);
 
-// DATA
-
-$report = (new YamlReader('/app/tests/report.yml'))->parse();
-
 // INIT
+$r1 = new Report(
+    'J0200119',
+    '1',
+    (new YamlReader('/app/tests/J0200119.yml'))->parse()
+);
 
-$collection = (new AccumulationFactory())->make($report);
+$r2 = new Report(
+    'J0200119',
+    '2',
+    (new YamlReader('/app/tests/J0200119.yml'))->parse()
+);
 
-// INPUT
+$r3 = new Report(
+    'J0200119',
+    '3',
+    (new YamlReader('/app/tests/J0200119.yml'))->parse()
+);
 
-$collection->find('22305e2b')->setValue(5);
-$collection->find('8f8709df')->setValue(20);
-$collection->find('cd9ac8a9')->setValue('ТО-2');
-$collection->find('eeb9eda1')->find('10ce46d7')->setValue(15);
-$collection->find('eeb9eda1')->find('d38a1eb4')->setValue(150);
+//eval(\Psy\sh());
+$collection = new ReportCollection();
+$collection->add($r1);
+$collection->add($r2);
+$collection->add($r3);
 
-$generated = $collection->find('726522a4')->generate();
-$generated->find('fb03f80b')->setValue(40);
-$generated->find('05ac5826')->setValue(42);
-
-// OUTPUT
-
-echo "Показатели текущего периода\n";
-echo 'План: ' . $collection->find('22305e2b')->getValue() . " | ";
-echo 'Факт: ' . $collection->find('8f8709df')->getValue() . " | ";
-echo 'Сумм: ' . $collection->find('summa')->getValue() . " | ";
-echo 'в %:  ' . $collection->find('07ff3925')->getValue() . " | ";
-echo 'Тип:  ' . $collection->find('cd9ac8a9')->getValue() . "\n\n";
-echo 'Задействовано сотрудников: ' .
-$collection->findNested(['eeb9eda1', '10ce46d7'])->getValue() . "\n";
-echo 'Человекочасов: ' .
-$collection->findNested(['eeb9eda1', 'd38a1eb4'])->getValue() . "\n";
-
-echo "Стоимость по дням:\n";
-$daily = $collection->find('726522a4')->getChildren();
-foreach ($daily as $day) {
-    foreach ($day->getChildren() as $item) {
-        echo $item->getValue() . " у.е.\n";
-    }
+foreach($collection as $report) {
+    print $report->getName() . ' ' . $report->getEvent() . "\n";
 }
+
+// $pdo = new \PDO('sqlite:/app/src/report.db');
+// $mapper = new ReportMapper($pdo);
+
+// $report = $mapper->find(2);
+
+// $name = 'J0200119';
+// $event = '3';
+// $data = (new YamlReader('/app/tests/J0200119.yml'))->parse();
+//
+// $report = new Report($name, $event, $data);
+//
+// $mapper = new ReportMapper($pdo);
+// $mapper->insert($report);
+//
+// // INPUT
+//
+// $report->data->find('1.1A')->setValue(1566790);
+// $report->data->find('1.1B')->setValue(313358);
+// $report->data->find('3A')->setValue(150186);
+// $report->data->find('4.1A')->setValue(471253);
+// $report->data->find('4.1B')->setValue(942451);
+// $report->data->find('7A')->setValue(-280446);
+// $report->data->find('7B')->setValue(-56089);
+// $report->data->find('8B')->setValue(1199720);
+// $report->data->find('10.1A')->setValue(5978284);
+// $report->data->find('10.1B')->setValue(1195657);
+// $report->data->find('10.2A')->setValue(1035);
+// $report->data->find('10.2B')->setValue(72);
+// $report->data->find('18')->setValue(3991);
+//
+// // var_dump($report->data->find('9B')->getValue(), $report->data->find("17B")->getValue());
+// var_dump($report->data->serialize());
+// $new = $report->data->find('dop')->generate();
+// $new->find("dopitem")->setValue('AAAAAA');
+// var_dump(Yaml::dump($report->data->serialize()), $report->serialize());

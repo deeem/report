@@ -18,4 +18,13 @@ class Summary extends Primitive
             return $carry + $parent->find($item)->getValue();
         }, 0);
     }
+
+    public function serialize()
+    {
+        return [
+            'name' => $this->name,
+            'type' => 'summary',
+            'paths' => $this->paths
+        ];
+    }
 }

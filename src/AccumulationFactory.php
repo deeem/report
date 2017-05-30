@@ -66,8 +66,14 @@ class AccumulationFactory
     {
         $this->isNameSet($item);
         $element = new Template($item['name']);
+        if (array_key_exists('schema', $item)) {
+            $element->setSchema($item['schema']);
+        }
+
         if (array_key_exists('pile', $item)) {
-            $element->setTemplate($item['pile']);
+            foreach ($item['pile'] as $accum) {
+                $element->addChild($this->makeAccumulation(['name' => $accum['name'], 'pile' => $accum['pile']]));
+            }
         }
 
         return $element;

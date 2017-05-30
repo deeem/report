@@ -16,4 +16,13 @@ class Input extends Primitive
     {
         return $this->value;
     }
+
+    public function serialize()
+    {
+        return [
+            'name' => $this->name,
+            'type' => 'input',
+            'value' => $this->value
+        ];
+    }
 }

@@ -30,4 +30,6 @@ abstract class Component
     {
         return null;
     }
+
+    abstract public function serialize();
 }

@@ -28,4 +28,14 @@ class Select extends Primitive
 
         return $this;
     }
+
+    public function serialize()
+    {
+        return [
+            'name' => $this->name,
+            'type' => 'select',
+            'value' => $this->value,
+            'options' => $this->options
+        ];
+    }
 }

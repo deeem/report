@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="report">
+        <column>id</column>
+        <column>name</column>
+        <column>event</column>
+        <column>data</column>
+    </table>
+</dataset>
