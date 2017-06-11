@@ -34,6 +34,7 @@ class ReportMapperTest extends TestCase
         $report = new Report(
             'J0200119',
             '3',
+            '7',
             (new YamlReader('/app/tests/J0200119.yml'))->parse()
         );
 
@@ -49,33 +50,12 @@ class ReportMapperTest extends TestCase
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
 
-    public function testUpdate()
-    {
-        $report = new Report(
-            'J0200119',
-            '3',
-            (new YamlReader('/app/tests/J0200119.yml'))->parse()
-        );
-
-        $report->data->find('1.1A')->setValue(50);
-
-        $mapper = new ReportMapper(self::$pdo);
-        $mapper->insert($report);
-
-        $queryTable = $this->getConnection()
-        ->createQueryTable('report', 'SELECT * FROM report');
-
-        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Update.xml')
-                              ->getTable('report');
-
-        $this->assertTablesEqual($expectedTable, $queryTable);
-    }
-
     public function testFind()
     {
         $expectedReport = new Report(
             'J0200119',
             '3',
+            '7',
             (new YamlReader('/app/tests/J0200119.yml'))->parse()
         );
 
@@ -89,5 +69,28 @@ class ReportMapperTest extends TestCase
         $this->assertEquals($expectedReport->getData(), $report->getData());
     }
 
-    // public function testSelectStmt - fetch multiple reports
+    public function testUpdate()
+    {
+        $report = new Report(
+            'J0200119',
+            '3',
+            '7',
+            (new YamlReader('/app/tests/J0200119.yml'))->parse()
+        );
+
+        $mapper = new ReportMapper(self::$pdo);
+        $mapper->insert($report);
+
+        $report->data->find('1.1A')->setValue(50);
+
+        $mapper->update($report);
+
+        $queryTable = $this->getConnection()
+        ->createQueryTable('report', 'SELECT * FROM report');
+
+        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Update.xml')
+                              ->getTable('report');
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
 }

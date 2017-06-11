@@ -8,13 +8,15 @@ class Report extends DomainObject
     private $id;
     private $name;
     private $event;
+    private $user;
     public $data;
 
-    public function __construct($name, $event, array $data, $id = null)
+    public function __construct($name, $event, $user, array $data, $id = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->event = $event;
+        $this->user = $user;
         $this->data = (new AccumulationFactory())->make($data);
     }
 
@@ -36,6 +38,11 @@ class Report extends DomainObject
     public function getEvent()
     {
         return $this->event;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
     }
 
     public function getData()

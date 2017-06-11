@@ -12,14 +12,17 @@ class ReportMapper extends Mapper
     public function __construct(\PDO $pdo)
     {
         parent::__construct($pdo);
+
         $this->selectStmt = $this->pdo->prepare(
             "SELECT * FROM report WHERE id=?"
         );
-        $this->updateStmt = $this->pdo->prepare(
-            "UPDATE report SET name=?, event=?, data=? WHERE id=?"
-        );
+
         $this->insertStmt = $this->pdo->prepare(
-            "INSERT INTO report(name, event, data) VALUES(?, ?, ?)"
+            "INSERT INTO report(name, event, user, data) VALUES(?, ?, ?, ?)"
+        );
+
+        $this->updateStmt = $this->pdo->prepare(
+            "UPDATE report SET id=?, name=?, event=?, user=?, data=? WHERE id=?"
         );
     }
 
@@ -33,6 +36,7 @@ class ReportMapper extends Mapper
         $obj = new Report(
             $raw['name'],
             (int)$raw['event'],
+            (int)$raw['user'],
             json_decode($raw['data'], true),
             (int)$raw['id']
         );
@@ -44,6 +48,7 @@ class ReportMapper extends Mapper
         $values = [
             $object->getName(),
             $object->getEvent(),
+            $object->getUser(),
             $object->getData()
         ];
 
@@ -55,9 +60,12 @@ class ReportMapper extends Mapper
     public function update(DomainObject $object)
     {
         $values = [
+            $object->getId(),
             $object->getName(),
             $object->getEvent(),
-            $object->getData()
+            $object->getUser(),
+            $object->getData(),
+            $object->getId()
         ];
 
         $this->updateStmt->execute($values);

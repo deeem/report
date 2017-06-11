@@ -4,6 +4,7 @@
         <column>id</column>
         <column>name</column>
         <column>event</column>
+        <column>user</column>
         <column>data</column>
     </table>
 </dataset>
