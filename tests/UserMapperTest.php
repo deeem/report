@@ -4,7 +4,7 @@ namespace App;
 use \PHPUnit\Framework\TestCase;
 use \PHPUnit\DbUnit\TestCaseTrait;
 
-class EventMapperTest extends TestCase
+class UserMapperTest extends TestCase
 {
     use TestCaseTrait;
 
@@ -26,50 +26,48 @@ class EventMapperTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/eventMapperDataSet.Empty.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/userMapperDataSet.Empty.xml');
     }
 
     public function testInsert()
     {
-        $mapper = new EventMapper(self::$pdo);
-        $object = new Event('daily 18.06', '1806', '1906', 'A00201');
+        $mapper = new UserMapper(self::$pdo);
+        $object = new User('user1');
         $mapper->insert($object);
 
         $queryTable = $this->getConnection()
-        ->createQueryTable('event', 'SELECT * FROM event');
+        ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/eventMapperDataSet.Insert.xml'
-        )->getTable('event');
+            dirname(__FILE__) . '/userMapperDataSet.Insert.xml'
+        )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
 
     public function testFind()
     {
-        $mapper = new EventMapper(self::$pdo);
-
-        $mapper->insert(new Event('daily 18.06', '1806', '1906', 'A00201'));
+        $mapper = new UserMapper(self::$pdo);
+        $mapper->insert(new User('user1'));
         $object = $mapper->find(1);
 
-        $this->assertEquals('A00201', $object->getReport());
+        $this->assertEquals('user1', $object->getName());
     }
 
     public function testUpdate()
     {
-        $mapper = new EventMapper(self::$pdo);
-
-        $mapper->insert(new Event('daily 18.06', '1806', '1906', 'A00201'));
+        $mapper = new UserMapper(self::$pdo);
+        $mapper->insert(new User('user1'));
         $object = $mapper->find(1);
-        $object->setReport('B00201');
+        $object->setName('user2');
         $mapper->update($object);
 
         $queryTable = $this->getConnection()
-        ->createQueryTable('event', 'SELECT * FROM event');
+        ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/eventMapperDataSet.Update.xml'
-        )->getTable('event');
+            dirname(__FILE__) . '/userMapperDataSet.Update.xml'
+        )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
