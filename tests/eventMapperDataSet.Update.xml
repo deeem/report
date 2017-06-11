@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="event">
+        <column>id</column>
+        <column>name</column>
+        <column>start</column>
+        <column>end</column>
+        <column>report</column>
+        <row>
+            <value>1</value>
+            <value>daily 18.06</value>
+            <value>1806</value>
+            <value>1906</value>
+            <value>B00201</value>
+        </row>
+    </table>
+</dataset>

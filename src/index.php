@@ -38,18 +38,28 @@ error_reporting(E_ALL);
 // }
 
 $pdo = new \PDO('mysql:dbname=report;host=db', 'report', 'secret');
-$mapper = new ReportMapper($pdo);
+
+$eventMapper = new EventMapper($pdo);
+
+$event = $eventMapper->find(1);
+$event->setName('daily 18.06');
+
+$eventMapper->update($event);
+
+//$eventMapper->insert($event);
+
+//$mapper = new ReportMapper($pdo);
 
 // $report = $mapper->find(2);
 
-$name = 'J0200119';
-$event = '3';
-$data = (new YamlReader('/app/tests/J0200119.yml'))->parse();
-
-$report = new Report($name, $event, $data);
-
-$mapper = new ReportMapper($pdo);
-$mapper->insert($report);
+// $name = 'J0200119';
+// $event = '3';
+// $data = (new YamlReader('/app/tests/J0200119.yml'))->parse();
+//
+// $report = new Report($name, $event, $data);
+//
+// $mapper = new ReportMapper($pdo);
+// $mapper->insert($report);
 //
 // // INPUT
 //
