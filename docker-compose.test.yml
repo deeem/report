@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+   db:
+     image: mysql:5.7
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: secret
+       MYSQL_DATABASE: report
+       MYSQL_USER: report
+       MYSQL_PASSWORD: secret
+
+   sut:
+     image: deeem/dbunit
+     depends_on:
+       - db
+     links:
+       - db:mysql
+     volumes:
+       - .:/app
+

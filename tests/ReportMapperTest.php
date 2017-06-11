@@ -16,11 +16,10 @@ class ReportMapperTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new \PDO('sqlite::memory:');
+                self::$pdo = new \PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD']);
             }
-            $this->conn = $this->createDefaultDBConnection(self::$pdo, ':memory:');
+            $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }
-        self::initDatabase();
 
         return $this->conn;
     }
@@ -28,17 +27,6 @@ class ReportMapperTest extends TestCase
     public function getDataSet()
     {
         return $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Empty.xml');
-    }
-
-    public static function initDatabase()
-    {
-        $query = 'CREATE TABLE IF NOT EXISTS "report" (
-            "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL,
-            "name" TEXT,
-            "event" INTEGER,
-            "data" TEXT)';
-
-        self::$pdo->query($query);
     }
 
     public function testInsert()
@@ -55,7 +43,7 @@ class ReportMapperTest extends TestCase
         $queryTable = $this->getConnection()
         ->createQueryTable('report', 'SELECT * FROM report');
 
-        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Expected1.xml')
+        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Insert.xml')
                               ->getTable("report");
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -77,7 +65,7 @@ class ReportMapperTest extends TestCase
         $queryTable = $this->getConnection()
         ->createQueryTable('report', 'SELECT * FROM report');
 
-        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Expected2.xml')
+        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/reportMapperDataSet.Update.xml')
                               ->getTable('report');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -96,7 +84,7 @@ class ReportMapperTest extends TestCase
         $mapper = new ReportMapper(self::$pdo);
         $mapper->insert($expectedReport);
 
-        $report = $mapper->find(3);
+        $report = $mapper->find(1);
 
         $this->assertEquals($expectedReport->getData(), $report->getData());
     }

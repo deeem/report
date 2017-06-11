@@ -8,48 +8,48 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 error_reporting(E_ALL);
 
-// INIT
-$r1 = new Report(
-    'J0200119',
-    '1',
-    (new YamlReader('/app/tests/J0200119.yml'))->parse()
-);
+// // INIT
+// $r1 = new Report(
+//     'J0200119',
+//     '1',
+//     (new YamlReader('/app/tests/J0200119.yml'))->parse()
+// );
+//
+// $r2 = new Report(
+//     'J0200119',
+//     '2',
+//     (new YamlReader('/app/tests/J0200119.yml'))->parse()
+// );
+//
+// $r3 = new Report(
+//     'J0200119',
+//     '3',
+//     (new YamlReader('/app/tests/J0200119.yml'))->parse()
+// );
+//
+// //eval(\Psy\sh());
+// $collection = new ReportCollection();
+// $collection->add($r1);
+// $collection->add($r2);
+// $collection->add($r3);
+//
+// foreach($collection as $report) {
+//     print $report->getName() . ' ' . $report->getEvent() . "\n";
+// }
 
-$r2 = new Report(
-    'J0200119',
-    '2',
-    (new YamlReader('/app/tests/J0200119.yml'))->parse()
-);
-
-$r3 = new Report(
-    'J0200119',
-    '3',
-    (new YamlReader('/app/tests/J0200119.yml'))->parse()
-);
-
-//eval(\Psy\sh());
-$collection = new ReportCollection();
-$collection->add($r1);
-$collection->add($r2);
-$collection->add($r3);
-
-foreach($collection as $report) {
-    print $report->getName() . ' ' . $report->getEvent() . "\n";
-}
-
-// $pdo = new \PDO('sqlite:/app/src/report.db');
-// $mapper = new ReportMapper($pdo);
+$pdo = new \PDO('mysql:dbname=report;host=db', 'report', 'secret');
+$mapper = new ReportMapper($pdo);
 
 // $report = $mapper->find(2);
 
-// $name = 'J0200119';
-// $event = '3';
-// $data = (new YamlReader('/app/tests/J0200119.yml'))->parse();
-//
-// $report = new Report($name, $event, $data);
-//
-// $mapper = new ReportMapper($pdo);
-// $mapper->insert($report);
+$name = 'J0200119';
+$event = '3';
+$data = (new YamlReader('/app/tests/J0200119.yml'))->parse();
+
+$report = new Report($name, $event, $data);
+
+$mapper = new ReportMapper($pdo);
+$mapper->insert($report);
 //
 // // INPUT
 //
