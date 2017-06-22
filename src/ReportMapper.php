@@ -5,16 +5,31 @@ namespace App;
 
 class ReportMapper extends Mapper
 {
+    private $selectAllStmt;
     private $selectStmt;
     private $updateStmt;
     private $insertStmt;
+    private $findByEventStmt;
+    private $findByUserStmt;
 
     public function __construct(\PDO $pdo)
     {
         parent::__construct($pdo);
 
+        $this->selectAllStmt = $this->pdo->prepare(
+            "SELECT * FROM report"
+        );
+
         $this->selectStmt = $this->pdo->prepare(
             "SELECT * FROM report WHERE id=?"
+        );
+
+        $this->findByEventStmt = $this->pdo->prepare(
+            "SELECT * FROM report WHERE event=?"
+        );
+
+        $this->findByUserStmt = $this->pdo->prepare(
+            "SELECT * FROM report WHERE user=?"
         );
 
         $this->insertStmt = $this->pdo->prepare(
@@ -34,12 +49,18 @@ class ReportMapper extends Mapper
     protected function doCreateObject(array $raw): DomainObject
     {
         $obj = new Report(
+            (int)$raw['id'],
             $raw['name'],
-            (int)$raw['event'],
-            (int)$raw['user'],
-            json_decode($raw['data'], true),
-            (int)$raw['id']
+            json_decode($raw['data'], true)
         );
+
+        $usermapper = new UserMapper($this->pdo);
+        $user = $usermapper->find((int)$raw['user']);
+        $obj->setUser($user);
+        $eventmapper = new EventMapper($this->pdo);
+        $event = $eventmapper->find((int)$raw['event']);
+        $obj->setEvent($event);
+
         return $obj;
     }
 
@@ -47,8 +68,8 @@ class ReportMapper extends Mapper
     {
         $values = [
             $object->getName(),
-            $object->getEvent(),
-            $object->getUser(),
+            $object->getEvent()->getId(),
+            $object->getUser()->getId(),
             $object->getData()
         ];
 
@@ -62,8 +83,8 @@ class ReportMapper extends Mapper
         $values = [
             $object->getId(),
             $object->getName(),
-            $object->getEvent(),
-            $object->getUser(),
+            $object->getEvent()->getId(),
+            $object->getUser()->getId(),
             $object->getData(),
             $object->getId()
         ];
@@ -71,8 +92,25 @@ class ReportMapper extends Mapper
         $this->updateStmt->execute($values);
     }
 
+    public function findByEvent($eid): Collection
+    {
+        $this->findByEventStmt->execute([$eid]);
+        return new ReportCollection($this->findByEventStmt->fetchAll(), $this);
+    }
+
+    public function findByUser($uid): Collection
+    {
+        $this->findByUserStmt->execute([$uid]);
+        return new ReportCollection($this->findByUserStmt->fetchAll(), $this);
+    }
+
     public function selectStmt(): \PDOStatement
     {
         return $this->selectStmt;
+    }
+
+    public function selectAllStmt(): \PDOStatement
+    {
+        return $this->selectAllStmt;
     }
 }

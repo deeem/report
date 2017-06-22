@@ -5,29 +5,19 @@ namespace App;
 
 class Event extends DomainObject
 {
-    protected $id;
     protected $name;
     protected $start;
     protected $end;
     protected $report;
+    private $reports;
 
-    public function __construct($name, $start, $end, $report, $id = null)
+    public function __construct(int $id, $name, $start, $end, $report)
     {
-        $this->id = $id;
+        parent::__construct($id);
         $this->name = $name;
         $this->start = $start;
         $this->end = $end;
         $this->report = $report;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     public function getName()
@@ -68,5 +58,26 @@ class Event extends DomainObject
     public function setReport(string $report)
     {
         $this->report = $report;
+    }
+
+    public function getReports(): ReportCollection
+    {
+        if (is_null($this->reports)) {
+            // $reg = Registry::instance();
+            // $this->reports = $reg->getReportCollection();
+            $this->reports = new ReportCollection();
+        }
+        return $this->reports;
+    }
+
+    public function setReports(ReportCollection $reports)
+    {
+        $this->reports = $reports;
+    }
+
+    public function addReport(Report $report)
+    {
+        $this->getReports()->add($report);
+        $report->setEvent($this);
     }
 }

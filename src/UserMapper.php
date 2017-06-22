@@ -33,7 +33,12 @@ class UserMapper extends Mapper
 
     public function doCreateObject(array $raw): DomainObject
     {
-        $obj = new User($raw['name'], (int)$raw['id']);
+        $obj = new User((int)$raw['id'], $raw['name']);
+
+        $reportmapper = new ReportMapper($this->pdo);
+        $reportcollection = $reportmapper->findByUser($raw['id']);
+        $obj->setReports($reportcollection);
+
         return $obj;
     }
 
@@ -62,5 +67,10 @@ class UserMapper extends Mapper
     public function selectStmt(): \PDOStatement
     {
         return $this->selectStmt;
+    }
+
+    public function selectAllStmt(): \PDOStatement
+    {
+        return $this->selectAllStmt;
     }
 }

@@ -31,6 +31,13 @@ abstract class Mapper
         return $object;
     }
 
+    public function findAll(): Collection
+    {
+        $this->selectAllStmt()->execute([]);
+
+        return $this->getCollection($this->selectAllStmt()->fetchAll());
+    }
+
     public function createObject(array $raw): DomainObject
     {
         $obj = $this->doCreateObject($raw);
@@ -47,4 +54,6 @@ abstract class Mapper
     abstract protected function doCreateObject(array $raw): DomainObject;
     abstract protected function doInsert(DomainObject $object);
     abstract protected function selectStmt(): \PDOStatement;
+    abstract protected function selectAllStmt(): \PDOStatement;
+    abstract protected function getCollection(array $raw): Collection;
 }

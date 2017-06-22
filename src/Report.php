@@ -5,29 +5,18 @@ namespace App;
 
 class Report extends DomainObject
 {
-    private $id;
     private $name;
     private $event;
     private $user;
     public $data;
 
-    public function __construct($name, $event, $user, array $data, $id = null)
+    public function __construct(int $id, $name, array $data, Event $event = null, User $user = null)
     {
-        $this->id = $id;
+        parent::__construct($id);
         $this->name = $name;
         $this->event = $event;
         $this->user = $user;
         $this->data = (new AccumulationFactory())->make($data);
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getName()
@@ -40,9 +29,19 @@ class Report extends DomainObject
         return $this->event;
     }
 
+    public function setEvent(Event $event)
+    {
+        $this->event = $event;
+    }
+
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 
     public function getData()

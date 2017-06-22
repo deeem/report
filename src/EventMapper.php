@@ -34,12 +34,17 @@ class EventMapper extends Mapper
     protected function doCreateObject(array $raw): DomainObject
     {
         $obj = new Event(
+            (int)$raw['id'],
             $raw['name'],
             (int)$raw['start'],
             (int)$raw['end'],
-            $raw['report'],
-            (int)$raw['id']
+            $raw['report']
         );
+
+        $reportmapper = new ReportMapper($this->pdo);
+        $reportcollection = $reportmapper->findByEvent($raw['id']);
+        $obj->setReports($reportcollection);
+
         return $obj;
     }
 
@@ -74,5 +79,10 @@ class EventMapper extends Mapper
     public function selectStmt(): \PDOStatement
     {
         return $this->selectStmt;
+    }
+
+    public function selectAllStmt(): \PDOStatement
+    {
+        return $this->selectAllStmt;
     }
 }

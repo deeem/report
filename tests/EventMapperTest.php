@@ -32,7 +32,7 @@ class EventMapperTest extends TestCase
     public function testInsert()
     {
         $mapper = new EventMapper(self::$pdo);
-        $object = new Event('daily 18.06', '1806', '1906', 'A00201');
+        $object = new Event(-1, 'daily 18.06', '1806', '1906', 'A00201');
         $mapper->insert($object);
 
         $queryTable = $this->getConnection()
@@ -49,7 +49,7 @@ class EventMapperTest extends TestCase
     {
         $mapper = new EventMapper(self::$pdo);
 
-        $mapper->insert(new Event('daily 18.06', '1806', '1906', 'A00201'));
+        $mapper->insert(new Event(-1, 'daily 18.06', '1806', '1906', 'A00201'));
         $object = $mapper->find(1);
 
         $this->assertEquals('A00201', $object->getReport());
@@ -59,7 +59,7 @@ class EventMapperTest extends TestCase
     {
         $mapper = new EventMapper(self::$pdo);
 
-        $mapper->insert(new Event('daily 18.06', '1806', '1906', 'A00201'));
+        $mapper->insert(new Event(-1, 'daily 18.06', '1806', '1906', 'A00201'));
         $object = $mapper->find(1);
         $object->setReport('B00201');
         $mapper->update($object);

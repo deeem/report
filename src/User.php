@@ -5,23 +5,13 @@ namespace App;
 
 class User extends DomainObject
 {
-    protected $id;
     protected $name;
+    private $reports;
 
-    public function __construct($name, $id = null)
+    public function __construct(int $id, $name)
     {
-        $this->id = $id;
+        parent::__construct($id);
         $this->name = $name;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     public function getName()
@@ -32,5 +22,26 @@ class User extends DomainObject
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function setReports(ReportCollection $reports)
+    {
+        $this->reports = $reports;
+    }
+
+    public function getReports():ReportCollection
+    {
+        if (is_null($this->reports)) {
+            // $reg = Registry::instance();
+            // $this->reports = $reg->getReportCollection();
+            $this->reports = new ReportCollection();
+        }
+        return $this->reports;
+    }
+
+    public function addReport(Report $report)
+    {
+        $this->getReports()->add($report);
+        $report->setEvent($this);
     }
 }
