@@ -85,4 +85,9 @@ class EventMapper extends Mapper
     {
         return $this->selectAllStmt;
     }
+
+    protected function targetClass(): string
+    {
+        return Event::class;
+    }
 }

@@ -14,6 +14,12 @@ abstract class Mapper
 
     public function find(int $id): DomainObject
     {
+        $old = $this->getFromMap($id);
+
+        if (! is_null($old)) {
+            return $old;
+        }
+
         $this->selectstmt()->execute([$id]);
         $row = $this->selectstmt()->fetch();
         $this->selectstmt()->closeCursor();
@@ -38,16 +44,37 @@ abstract class Mapper
         return $this->getCollection($this->selectAllStmt()->fetchAll());
     }
 
-    public function createObject(array $raw): DomainObject
-    {
-        $obj = $this->doCreateObject($raw);
-
-        return $obj;
-    }
-
     public function insert(DomainObject $obj)
     {
         $this->doInsert($obj);
+        $this->addToMap($obj);
+    }
+
+    private function getFromMap($id)
+    {
+        return ObjectWatcher::exists(
+            $this->targetClass(),
+            $id
+        );
+    }
+
+    private function addToMap(DomainObject $obj)
+    {
+        ObjectWatcher::add($obj);
+    }
+
+    public function createObject($raw)
+    {
+        $old = $this->getFromMap($raw['id']);
+
+        if (! is_null($old)) {
+            return $old;
+        }
+
+        $obj = $this->doCreateObject($raw);
+        $this->addToMap($obj);
+
+        return $obj;
     }
 
     abstract public function update(DomainObject $object);
@@ -56,4 +83,5 @@ abstract class Mapper
     abstract protected function selectStmt(): \PDOStatement;
     abstract protected function selectAllStmt(): \PDOStatement;
     abstract protected function getCollection(array $raw): Collection;
+    abstract protected function targetClass(): string;
 }

@@ -73,4 +73,9 @@ class UserMapper extends Mapper
     {
         return $this->selectAllStmt;
     }
+
+    protected function targetClass(): string
+    {
+        return User::class;
+    }
 }

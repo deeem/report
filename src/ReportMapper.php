@@ -113,4 +113,9 @@ class ReportMapper extends Mapper
     {
         return $this->selectAllStmt;
     }
+
+    protected function targetClass(): string
+    {
+        return Report::class;
+    }
 }
