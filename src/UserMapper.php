@@ -9,9 +9,9 @@ class UserMapper extends Mapper
     private $updateStmt;
     private $insertStmt;
 
-    public function __construct(\PDO $pdo)
+    public function __construct()
     {
-        parent::__construct($pdo);
+        parent::__construct();
 
         $this->selectStmt = $this->pdo->prepare(
             "SELECT * FROM user WHERE id=?"
@@ -35,7 +35,7 @@ class UserMapper extends Mapper
     {
         $obj = new User((int)$raw['id'], $raw['name']);
 
-        $reportmapper = new ReportMapper($this->pdo);
+        $reportmapper = new ReportMapper();
         $reportcollection = $reportmapper->findByUser($raw['id']);
         $obj->setReports($reportcollection);
 

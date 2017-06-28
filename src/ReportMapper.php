@@ -12,9 +12,9 @@ class ReportMapper extends Mapper
     private $findByEventStmt;
     private $findByUserStmt;
 
-    public function __construct(\PDO $pdo)
+    public function __construct()
     {
-        parent::__construct($pdo);
+        parent::__construct();
 
         $this->selectAllStmt = $this->pdo->prepare(
             "SELECT * FROM report"
@@ -54,10 +54,10 @@ class ReportMapper extends Mapper
             json_decode($raw['data'], true)
         );
 
-        $usermapper = new UserMapper($this->pdo);
+        $usermapper = new UserMapper();
         $user = $usermapper->find((int)$raw['user']);
         $obj->setUser($user);
-        $eventmapper = new EventMapper($this->pdo);
+        $eventmapper = new EventMapper();
         $event = $eventmapper->find((int)$raw['event']);
         $obj->setEvent($event);
 

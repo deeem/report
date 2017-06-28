@@ -16,7 +16,16 @@ class UserMapperTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new \PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD']);
+                $reg = Registry::instance();
+                $reg->setConf(new Conf(
+                    [
+                    'DB_DSN' => $GLOBALS['DB_DSN'],
+                    'DB_USER' =>  $GLOBALS['DB_USER'],
+                    'DB_PASSWD' => $GLOBALS['DB_PASSWD']
+                    ]
+                ));
+
+                self::$pdo = $reg->getPdo();
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }

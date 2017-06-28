@@ -7,13 +7,22 @@ require_once '/app/vendor/autoload.php';
 
 error_reporting(E_ALL);
 
-$pdo = new \PDO('mysql:dbname=report;host=db', 'report', 'secret');
+$options = [
+    'DB_DSN' => 'mysql:dbname=report;host=db',
+    'DB_USER' => 'report',
+    'DB_PASSWD' => 'secret'
+];
+
+$conf = new Conf($options);
+
+$reg = Registry::instance();
+$reg->setConf($conf);
 
 $watcher = ObjectWatcher::instance();
 
-$rmapper = new ReportMapper($pdo);
-$emapper = new EventMapper($pdo);
-$umapper = new UserMapper($pdo);
+$rmapper = new ReportMapper($reg->getPdo());
+$emapper = new EventMapper($reg->getPdo());
+$umapper = new UserMapper($reg->getPdo());
 
 $report = new Report(
     -1,

@@ -7,9 +7,10 @@ abstract class Mapper
 {
     protected $pdo;
 
-    public function __construct(\PDO $pdo)
+    public function __construct()
     {
-        $this->pdo = $pdo;
+        $reg = Registry::instance();
+        $this->pdo = $reg->getPdo();
     }
 
     public function find(int $id): DomainObject
