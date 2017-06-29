@@ -16,6 +16,7 @@ class ReportMapperTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
+                Registry::reset();
                 $reg = Registry::instance();
                 $reg->setConf(new Conf(
                     [
@@ -40,19 +41,20 @@ class ReportMapperTest extends TestCase
 
     public function testInsert()
     {
-        $eventmapper = new EventMapper(self::$pdo);
-        $usermapper = new UserMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $eventmapper = new EventMapper();
+        $usermapper = new UserMapper();
 
         $report = new Report(
             -1,
             'J0200119',
-            (new YamlReader('/app/tests/J0200119.yml'))->parse()
+            (new YamlReader('/app/tests/J0200119.yml'))->parse(),
+            $eventmapper->find(1),
+            $usermapper->find(1)
         );
 
-        $report->setEvent($eventmapper->find(1));
-        $report->setUser($usermapper->find(1));
-
-        $mapper = new ReportMapper(self::$pdo);
+        $mapper = new ReportMapper();
         $mapper->insert($report);
 
         $queryTable = $this->getConnection()
@@ -66,9 +68,11 @@ class ReportMapperTest extends TestCase
 
     public function testFind()
     {
-        $usermapper = new UserMapper(self::$pdo);
-        $eventmapper = new EventMapper(self::$pdo);
-        $reportmapper = new ReportMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $usermapper = new UserMapper();
+        $eventmapper = new EventMapper();
+        $reportmapper = new ReportMapper();
 
         $expectedReport = new Report(
             -1,
@@ -88,6 +92,8 @@ class ReportMapperTest extends TestCase
 
     public function testUpdate()
     {
+        ObjectWatcher::reset();
+
         $report = new Report(
             -1,
             'J0200119',
@@ -96,7 +102,7 @@ class ReportMapperTest extends TestCase
             new User(7, 'user1')
         );
 
-        $mapper = new ReportMapper(self::$pdo);
+        $mapper = new ReportMapper();
         $mapper->insert($report);
 
         $report->data->find('1.1A')->setValue(50);
@@ -114,8 +120,10 @@ class ReportMapperTest extends TestCase
 
     public function testCollection()
     {
-        $eventmapper = new EventMapper(self::$pdo);
-        $usermapper = new UserMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $eventmapper = new EventMapper();
+        $usermapper = new UserMapper();
 
         $report = new Report(
             -1,

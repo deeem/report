@@ -16,6 +16,7 @@ class EventMapperTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
+                Registry::reset();
                 $reg = Registry::instance();
                 $reg->setConf(new Conf(
                     [
@@ -40,7 +41,9 @@ class EventMapperTest extends TestCase
 
     public function testInsert()
     {
-        $mapper = new EventMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new EventMapper();
         $object = new Event(-1, 'daily 18.06', '1806', '1906', 'A00201');
         $mapper->insert($object);
 
@@ -56,7 +59,9 @@ class EventMapperTest extends TestCase
 
     public function testFind()
     {
-        $mapper = new EventMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new EventMapper();
 
         $mapper->insert(new Event(-1, 'daily 18.06', '1806', '1906', 'A00201'));
         $object = $mapper->find(1);
@@ -66,7 +71,9 @@ class EventMapperTest extends TestCase
 
     public function testUpdate()
     {
-        $mapper = new EventMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new EventMapper();
 
         $mapper->insert(new Event(-1, 'daily 18.06', '1806', '1906', 'A00201'));
         $object = $mapper->find(1);

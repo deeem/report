@@ -32,6 +32,7 @@ class Report extends DomainObject
     public function setEvent(Event $event)
     {
         $this->event = $event;
+        $this->markDirty();
     }
 
     public function getUser()
@@ -42,10 +43,17 @@ class Report extends DomainObject
     public function setUser(User $user)
     {
         $this->user = $user;
+        $this->markDirty();
     }
 
     public function getData()
     {
         return json_encode($this->data->serialize());
+    }
+
+    public function getFinder(): Mapper
+    {
+        $reg = Registry::instance();
+        return $reg->getReportMapper();
     }
 }

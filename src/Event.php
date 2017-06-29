@@ -28,6 +28,7 @@ class Event extends DomainObject
     public function setName($name)
     {
         $this->name = $name;
+        $this->markDirty();
     }
 
     public function getStart()
@@ -38,6 +39,7 @@ class Event extends DomainObject
     public function setStart($start)
     {
         $this->start = $start;
+        $this->markDirty();
     }
 
     public function getEnd()
@@ -48,6 +50,7 @@ class Event extends DomainObject
     public function setEnd($end)
     {
         $this->end = $end;
+        $this->markDirty();
     }
 
     public function getReport()
@@ -58,6 +61,7 @@ class Event extends DomainObject
     public function setReport(string $report)
     {
         $this->report = $report;
+        $this->markDirty();
     }
 
     public function getReports(): ReportCollection
@@ -79,5 +83,11 @@ class Event extends DomainObject
     {
         $this->getReports()->add($report);
         $report->setEvent($this);
+    }
+
+    public function getFinder(): Mapper
+    {
+        $reg = Registry::instance();
+        return $reg->getEventMapper();
     }
 }

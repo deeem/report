@@ -16,6 +16,7 @@ class UserMapperTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
+                Registry::reset();
                 $reg = Registry::instance();
                 $reg->setConf(new Conf(
                     [
@@ -40,7 +41,9 @@ class UserMapperTest extends TestCase
 
     public function testInsert()
     {
-        $mapper = new UserMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new UserMapper();
         $object = new User(-1, 'user1');
         $mapper->insert($object);
 
@@ -56,7 +59,9 @@ class UserMapperTest extends TestCase
 
     public function testFind()
     {
-        $mapper = new UserMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new UserMapper();
         $mapper->insert(new User(-1, 'user1'));
         $object = $mapper->find(1);
 
@@ -65,7 +70,9 @@ class UserMapperTest extends TestCase
 
     public function testUpdate()
     {
-        $mapper = new UserMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new UserMapper();
         $mapper->insert(new User(-1, 'user1'));
         $object = $mapper->find(1);
         $object->setName('user2');

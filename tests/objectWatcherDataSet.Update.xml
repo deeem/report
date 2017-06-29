@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="report">
+        <column>id</column>
+        <column>name</column>
+        <column>event</column>
+        <column>user</column>
+        <column>data</column>
+        <row>
+            <value>1</value>
+            <value>J0200119</value>
+            <value>1</value>
+            <value>2</value>
+            <value>{"name":"J0200119","type":"accumulation","pile":[{"name":"1.1A","type":"input","value":null},{"name":"1.1B","type":"input","value":null},{"name":"1.2A","type":"input","value":null},{"name":"1.2B","type":"input","value":null},{"name":"2A","type":"input","value":null},{"name":"3A","type":"input","value":null},{"name":"4.1A","type":"input","value":null},{"name":"4.1B","type":"input","value":null},{"name":"4.2A","type":"input","value":null},{"name":"4.2B","type":"input","value":null},{"name":"5A","type":"input","value":null},{"name":"6A","type":"input","value":null},{"name":"6B","type":"input","value":null},{"name":"7A","type":"input","value":null},{"name":"7B","type":"input","value":null},{"name":"8A","type":"input","value":null},{"name":"8B","type":"input","value":null},{"name":"9B","type":"summary","paths":["1.1B","1.2B","4.1B","4.2B","6B","7B","8B"]},{"name":"10.1A","type":"input","value":null},{"name":"10.1B","type":"input","value":null},{"name":"10.2A","type":"input","value":null},{"name":"10.2B","type":"input","value":null},{"name":"10.3A","type":"input","value":null},{"name":"11.1A","type":"input","value":null},{"name":"11.1B","type":"input","value":null},{"name":"11.2A","type":"input","value":null},{"name":"11.2B","type":"input","value":null},{"name":"12A","type":"input","value":null},{"name":"12B","type":"input","value":null},{"name":"13A","type":"input","value":null},{"name":"13B","type":"input","value":null},{"name":"14A","type":"input","value":null},{"name":"14B","type":"input","value":null},{"name":"15A","type":"input","value":null},{"name":"15B","type":"input","value":null},{"name":"16B","type":"input","value":null},{"name":"16.1B","type":"input","value":null},{"name":"16.2B","type":"input","value":null},{"name":"16.3B","type":"input","value":null},{"name":"16B","type":"input","value":null},{"name":"17B","type":"summary","paths":["10.1B","10.2B","11.1B","11.2B","12B","13B","14B","15B","16B"]},{"name":"18","type":"input","value":null},{"name":"19","type":"input","value":null},{"name":"19.1","type":"input","value":null},{"name":"20","type":"input","value":null},{"name":"20.1","type":"input","value":null},{"name":"20.2","type":"input","value":null},{"name":"20.2.1","type":"input","value":null},{"name":"20.2.2","type":"input","value":null},{"name":"20.3","type":"input","value":null},{"name":"21","type":"input","value":null},{"name":"dop","type":"template","schema":[{"name":"dopitem","type":"input"}],"pile":[{"name":"10konrc","type":"accumulation","pile":[{"name":"dopitem","type":"input","value":"YYYYYY"}]}]}]}</value>
+        </row>
+    </table>
+    <table name="user">
+        <column>id</column>
+        <column>name</column>
+        <row>
+            <value>1</value>
+            <value>user1</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>user2</value>
+        </row>
+    </table>
+    <table name="event">
+        <column>id</column>
+        <column>name</column>
+        <column>start</column>
+        <column>end</column>
+        <column>report</column>
+        <row>
+            <value>1</value>
+            <value>daily 18.06</value>
+            <value>1806</value>
+            <value>1906</value>
+            <value>A00201</value>
+        </row>
+    </table>
+</dataset>

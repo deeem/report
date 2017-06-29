@@ -16,7 +16,17 @@ class ObjectWatcherTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new \PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD']);
+                Registry::reset();
+                $reg = Registry::instance();
+                $reg->setConf(new Conf(
+                    [
+                    'DB_DSN' => $GLOBALS['DB_DSN'],
+                    'DB_USER' =>  $GLOBALS['DB_USER'],
+                    'DB_PASSWD' => $GLOBALS['DB_PASSWD']
+                    ]
+                ));
+
+                self::$pdo = $reg->getPdo();
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }
@@ -31,7 +41,9 @@ class ObjectWatcherTest extends TestCase
 
     public function testObjectWatcherAddToMap()
     {
-        $mapper = new ReportMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper = new ReportMapper();
         $mapper->find(1);
 
         $watcher = ObjectWatcher::instance();
@@ -42,16 +54,75 @@ class ObjectWatcherTest extends TestCase
 
     public function testObjectWatcherGetFromMap()
     {
-        $mapper1 = new ReportMapper(self::$pdo);
+        ObjectWatcher::reset();
+
+        $mapper1 = new ReportMapper();
         $reportFromMapper1 = $mapper1->find(1);
         $reportFromMapper1->data->find('1.1A')->setValue(50);
 
-        $mapper2 = new ReportMapper(self::$pdo);
+        $mapper2 = new ReportMapper();
         $reportFromMapper2 = $mapper2->find(1);
 
         $this->assertEquals(
             $reportFromMapper1->data->find('1.1A')->getValue(),
             $reportFromMapper2->data->find('1.1A')->getValue()
         );
+    }
+
+    public function testInsertNewObjects()
+    {
+        ObjectWatcher::reset();
+
+        $reg = Registry::instance();
+
+        $report = new Report(
+            -1,
+            'J0200119',
+            (new YamlReader('/app/tests/J0200119.yml'))->parse(),
+            $reg->getEventMapper()->find(1),
+            $reg->getUserMapper()->find(1)
+        );
+
+        ObjectWatcher::instance()->performOperations();
+
+        $queryTable = $this->getConnection()
+        ->createQueryTable('report', 'SELECT * FROM report');
+
+        $expectedTable = $this->createXmlDataSet(
+            dirname(__FILE__) . '/objectWatcherDataSet.Insert.xml'
+        )->getTable('report');
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    public function testUpdateExistingObjects()
+    {
+        ObjectWatcher::reset();
+
+        $newUser = new User(-1, 'user2');
+        ObjectWatcher::instance()->performOperations();
+
+        $reportMapper = new ReportMapper();
+        $report = $reportMapper->find(1);
+        $report->setUser($newUser);
+        ObjectWatcher::instance()->performOperations();
+
+        $queryReportTable = $this->getConnection()
+        ->createQueryTable('report', 'SELECT * FROM report');
+
+        $expectedReportTable = $this->createXmlDataSet(
+            dirname(__FILE__) . '/objectWatcherDataSet.Update.xml'
+        )->getTable('report');
+
+        $this->assertTablesEqual($expectedReportTable, $queryReportTable);
+
+        $queryUserTable = $this->getConnection()
+        ->createQueryTable('user', 'SELECT * FROM user');
+
+        $expectedUserTable = $this->createXmlDataSet(
+            dirname(__FILE__) . '/objectWatcherDataSet.Update.xml'
+        )->getTable('user');
+
+        $this->assertTablesEqual($expectedUserTable, $queryUserTable);
     }
 }

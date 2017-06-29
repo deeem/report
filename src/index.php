@@ -7,32 +7,28 @@ require_once '/app/vendor/autoload.php';
 
 error_reporting(E_ALL);
 
-$options = [
-    'DB_DSN' => 'mysql:dbname=report;host=db',
-    'DB_USER' => 'report',
-    'DB_PASSWD' => 'secret'
-];
-
-$conf = new Conf($options);
-
 $reg = Registry::instance();
-$reg->setConf($conf);
+$reg->setConf(new Conf(
+    [
+        'DB_DSN' => 'mysql:dbname=report;host=db',
+        'DB_USER' => 'report',
+        'DB_PASSWD' => 'secret'
+    ]
+));
 
-$watcher = ObjectWatcher::instance();
-
-$rmapper = new ReportMapper($reg->getPdo());
-$emapper = new EventMapper($reg->getPdo());
-$umapper = new UserMapper($reg->getPdo());
-
+/*
 $report = new Report(
     -1,
-    'J0200119',
+    'Z0200119',
     (new YamlReader('/app/tests/J0200119.yml'))->parse()
 );
 
-$report->setEvent($emapper->find(1));
-$report->setUser($umapper->find(1));
+$report->setEvent($reg->getEventMapper()->find(1));
+$report->setUser($reg->getUserMapper()->find(1));
+*/
+$newUser = new User(-1, 'user333');
 
-if ($user = $watcher::exists(User::class, 1)) {
-    var_dump($user->getReports());
-}
+$report = $reg->getReportMapper()->find(1);
+$report->setUser($newUser);
+
+ObjectWatcher::instance()->performOperations();

@@ -22,6 +22,11 @@ class Registry
         return self::$instance;
     }
 
+    public static function reset()
+    {
+        self::$instance = null;
+    }
+
     public function setConf(Conf $conf)
     {
         $this->conf = $conf;
@@ -55,7 +60,33 @@ class Registry
         return $this->pdo;
     }
 
-    // mappers
+    public function getEventMapper()
+    {
+        return new EventMapper();
+    }
 
-    // collections
+    public function getReportMapper()
+    {
+        return new ReportMapper();
+    }
+
+    public function getUserMapper()
+    {
+        return new UserMapper();
+    }
+
+    public function getEventCollection()
+    {
+        return new EventCollection();
+    }
+
+    public function getReportCollection()
+    {
+        return new ReportCollection();
+    }
+
+    public function getUserCollection()
+    {
+        return new UserCollection();
+    }
 }

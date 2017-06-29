@@ -22,6 +22,7 @@ class User extends DomainObject
     public function setName($name)
     {
         $this->name = $name;
+        $this->markDirty();
     }
 
     public function setReports(ReportCollection $reports)
@@ -43,5 +44,11 @@ class User extends DomainObject
     {
         $this->getReports()->add($report);
         $report->setEvent($this);
+    }
+
+    public function getFinder(): Mapper
+    {
+        $reg = Registry::instance();
+        return $reg->getUserMapper();
     }
 }

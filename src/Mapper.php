@@ -64,7 +64,7 @@ abstract class Mapper
         ObjectWatcher::add($obj);
     }
 
-    public function createObject($raw)
+    public function createObject($raw): DomainObject
     {
         $old = $this->getFromMap($raw['id']);
 
