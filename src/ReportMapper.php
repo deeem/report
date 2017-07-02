@@ -94,14 +94,20 @@ class ReportMapper extends Mapper
 
     public function findByEvent($eid): Collection
     {
-        $this->findByEventStmt->execute([$eid]);
-        return new ReportCollection($this->findByEventStmt->fetchAll(), $this);
+        return new DefferedReportCollection(
+            $this,
+            $this->findByEventStmt,
+            [$eid]
+        );
     }
 
     public function findByUser($uid): Collection
     {
-        $this->findByUserStmt->execute([$uid]);
-        return new ReportCollection($this->findByUserStmt->fetchAll(), $this);
+        return new DefferedReportCollection(
+            $this,
+            $this->findByUserStmt,
+            [$uid]
+        );
     }
 
     public function selectStmt(): \PDOStatement

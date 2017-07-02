@@ -134,7 +134,7 @@ class ReportMapperTest extends TestCase
         $report->setEvent($eventmapper->find(1));
         $report->setUser($usermapper->find(1));
 
-        $mapper = new ReportMapper(self::$pdo);
+        $mapper = new ReportMapper();
         $mapper->insert($report);
         $id = self::$pdo->lastInsertId();
 
@@ -144,5 +144,45 @@ class ReportMapperTest extends TestCase
         $this->assertInstanceOf(User::class, $report2->getUser());
         $this->assertInstanceOf(ReportCollection::class, $report2->getEvent()->getReports());
         $this->assertInstanceOf(ReportCollection::class, $report2->getUser()->getReports());
+    }
+
+    public function testDefferedCollection()
+    {
+        ObjectWatcher::reset();
+
+        $reg = Registry::instance();
+
+        $fooEventObject = $reg->getEventMapper()->find(1);
+
+        $barEventObject = $reg->getEventMapper()->find(1);
+
+        $report = new Report(
+            -1,
+            'J0200119',
+            (new YamlReader('/app/tests/J0200119.yml'))->parse(),
+            $reg->getEventMapper()->find(1),
+            $reg->getUserMapper()->find(1)
+        );
+
+        ObjectWatcher::instance()->performOperations();
+
+        $reports1 = $fooEventObject->getReports();
+        $reports2 = $barEventObject->getReports();
+
+        $this->assertInstanceOf(DefferedReportCollection::class, $reports1);
+        $this->assertInstanceOf(DefferedReportCollection::class, $reports2);
+
+        $reports1->notifyAccess();
+        $reports2->notifyAccess();
+
+        $count = function ($collection) {
+            $i = 0;
+            foreach ($collection as $item) {
+                $i++;
+            }
+            return $i;
+        };
+
+        $this->assertEquals($count($reports1), $count($reports2));
     }
 }
