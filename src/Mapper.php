@@ -5,7 +5,7 @@ namespace App;
 
 abstract class Mapper
 {
-    protected $pdo;
+    protected $pdo = null;
 
     public function __construct()
     {
@@ -13,11 +13,24 @@ abstract class Mapper
         $this->pdo = $reg->getPdo();
     }
 
-    public function find(int $id): DomainObject
+    private function getFromMap($id)
+    {
+        return ObjectWatcher::exists(
+            $this->targetClass(),
+            $id
+        );
+    }
+
+    private function addToMap(DomainObject $obj): DomainObject
+    {
+        return ObjectWatcher::add($obj);
+    }
+
+    public function find(int $id)
     {
         $old = $this->getFromMap($id);
 
-        if (! is_null($old)) {
+        if ($old) {
             return $old;
         }
 
@@ -34,6 +47,7 @@ abstract class Mapper
         }
 
         $object = $this->createObject($row);
+        $object->markClean();
 
         return $object;
     }
@@ -42,47 +56,36 @@ abstract class Mapper
     {
         $this->selectAllStmt()->execute([]);
 
-        return $this->getCollection($this->selectAllStmt()->fetchAll());
+        return $this->getCollection($this->selectAllStmt()->fetchAll(\PDO::FETCH_ASSOC));
+    }
+
+    public function getFactory(): PersistenceFactory
+    {
+        return PersistenceFactory::getFactory($this->targetClass());
+    }
+
+    public function createObject(array $row): DomainObject
+    {
+        $objectfactory = $this->getFactory()->getDomainObjectFactory();
+
+        return $objectfactory->createObject($row);
+    }
+
+    public function getCollection(array $raw): Collection
+    {
+        return $this->getFactory()->getCollection($raw);
     }
 
     public function insert(DomainObject $obj)
     {
         $this->doInsert($obj);
         $this->addToMap($obj);
+        $obj->markClean();
     }
 
-    private function getFromMap($id)
-    {
-        return ObjectWatcher::exists(
-            $this->targetClass(),
-            $id
-        );
-    }
-
-    private function addToMap(DomainObject $obj)
-    {
-        ObjectWatcher::add($obj);
-    }
-
-    public function createObject($raw): DomainObject
-    {
-        $old = $this->getFromMap($raw['id']);
-
-        if (! is_null($old)) {
-            return $old;
-        }
-
-        $obj = $this->doCreateObject($raw);
-        $this->addToMap($obj);
-
-        return $obj;
-    }
-
-    abstract public function update(DomainObject $object);
-    abstract protected function doCreateObject(array $raw): DomainObject;
+    // abstract public function update(DomainObject $object);
     abstract protected function doInsert(DomainObject $object);
     abstract protected function selectStmt(): \PDOStatement;
     abstract protected function selectAllStmt(): \PDOStatement;
-    abstract protected function getCollection(array $raw): Collection;
     abstract protected function targetClass(): string;
 }

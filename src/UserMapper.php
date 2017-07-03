@@ -6,12 +6,17 @@ namespace App;
 class UserMapper extends Mapper
 {
     private $selectStmt;
+    private $selectAllStmt;
     private $updateStmt;
     private $insertStmt;
 
     public function __construct()
     {
         parent::__construct();
+
+        $this->selectAllStmt = $this->pdo->prepare(
+            "SELECT * FROM user"
+        );
 
         $this->selectStmt = $this->pdo->prepare(
             "SELECT * FROM user WHERE id=?"
@@ -24,22 +29,6 @@ class UserMapper extends Mapper
         $this->insertStmt = $this->pdo->prepare(
             "INSERT INTO user(name) VALUES(?)"
         );
-    }
-
-    public function getCollection(array $raw): Collection
-    {
-        return new UserCollection($raw, $this);
-    }
-
-    public function doCreateObject(array $raw): DomainObject
-    {
-        $obj = new User((int)$raw['id'], $raw['name']);
-
-        $reportmapper = new ReportMapper();
-        $reportcollection = $reportmapper->findByUser($raw['id']);
-        $obj->setReports($reportcollection);
-
-        return $obj;
     }
 
     public function doInsert(DomainObject $object)

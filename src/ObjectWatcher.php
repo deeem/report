@@ -52,6 +52,8 @@ class ObjectWatcher
     {
         $inst = self::instance();
         $inst->all[$inst->globalKey($obj)] = $obj;
+
+        return $obj;
     }
 
     public static function exists($classname, $id)

@@ -10,11 +10,11 @@ class DefferedReportCollection extends ReportCollection
     private $run = false;
 
     public function __construct(
-        Mapper $mapper,
+        DomainObjectFactory $dofact,
         \PDOStatement $stmt_handle,
         array $valueArray
     ) {
-        parent::__construct([], $mapper);
+        parent::__construct(null, $dofact);
         $this->stmt = $stmt_handle;
         $this->valueArray = $valueArray;
     }

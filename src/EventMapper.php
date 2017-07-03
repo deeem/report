@@ -6,12 +6,17 @@ namespace App;
 class EventMapper extends Mapper
 {
     private $selectStmt;
+    private $selectAllStmt;
     private $updateStmt;
     private $insertStmt;
 
     public function __construct()
     {
         parent::__construct();
+
+        $this->selectAllStmt = $this->pdo->prepare(
+            "SELECT * FROM event"
+        );
 
         $this->selectStmt = $this->pdo->prepare(
             "SELECT * FROM event WHERE id=?"
@@ -24,28 +29,6 @@ class EventMapper extends Mapper
         $this->insertStmt = $this->pdo->prepare(
             "INSERT INTO event(name, start, end, report) VALUES(?, ?, ?, ?)"
         );
-    }
-
-    public function getCollection(array $raw): Collection
-    {
-        return new EventCollection($raw, $this);
-    }
-
-    protected function doCreateObject(array $raw): DomainObject
-    {
-        $obj = new Event(
-            (int)$raw['id'],
-            $raw['name'],
-            (int)$raw['start'],
-            (int)$raw['end'],
-            $raw['report']
-        );
-
-        $reportmapper = new ReportMapper();
-        $reportcollection = $reportmapper->findByEvent($raw['id']);
-        $obj->setReports($reportcollection);
-
-        return $obj;
     }
 
     protected function doInsert(DomainObject $object)

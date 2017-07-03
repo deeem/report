@@ -41,31 +41,20 @@ class ReportMapper extends Mapper
         );
     }
 
-    public function getCollection(array $raw): Collection
-    {
-        return new ReportCollection($raw, $this);
-    }
-
-    protected function doCreateObject(array $raw): DomainObject
-    {
-        $obj = new Report(
-            (int)$raw['id'],
-            $raw['name'],
-            json_decode($raw['data'], true)
-        );
-
-        $usermapper = new UserMapper();
-        $user = $usermapper->find((int)$raw['user']);
-        $obj->setUser($user);
-        $eventmapper = new EventMapper();
-        $event = $eventmapper->find((int)$raw['event']);
-        $obj->setEvent($event);
-
-        return $obj;
-    }
-
     protected function doInsert(DomainObject $object)
     {
+        $event = $object->getEvent();
+
+        if (! $event) {
+            throw new AppException("cannot save without Event");
+        }
+
+        $user = $object->getUser();
+
+        if (! $user) {
+            throw new AppException("cannot save without User");
+        }
+
         $values = [
             $object->getName(),
             $object->getEvent()->getId(),

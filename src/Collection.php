@@ -5,23 +5,22 @@ namespace App;
 
 abstract class Collection implements \Iterator
 {
-    protected $mapper;
+    protected $dofact = null;
     protected $total = 0;
     protected $raw = [];
 
+    private $result;
     private $pointer = 0;
     private $objects = [];
 
-    public function __construct(array $raw = [], Mapper $mapper = null)
+    public function __construct(array $raw = [], DomainObjectFactory $dofact = null)
     {
-        $this->raw = $raw;
-        $this->total = count($raw);
-
-        if (count($raw) && is_null($mapper)) {
-            throw new AppException("need Mapper to generate objects");
+        if (count($raw) && ! is_null($dofact)) {
+            $this->raw = $raw;
+            $this->total = count($raw);
         }
 
-        $this->mapper = $mapper;
+        $this->dofact = $dofact;
     }
 
     public function add(DomainObject $object)
@@ -44,7 +43,7 @@ abstract class Collection implements \Iterator
         // deliberately left blank!
     }
 
-    private function getRow($num)
+    private function getRow(int $num)
     {
         $this->notifyAccess();
 
@@ -57,7 +56,7 @@ abstract class Collection implements \Iterator
         }
 
         if (isset($this->raw[$num])) {
-            $this->objects[$num] = $this->mapper->createObject($this->raw[$num]);
+            $this->objects[$num] = $this->dofact->createObject($this->raw[$num]);
 
             return $this->objects[$num];
         }
