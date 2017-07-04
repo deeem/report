@@ -10,7 +10,7 @@ class UserPersistenceFactory extends PersistenceFactory
         return new UserMapper();
     }
 
-    public function getDomainOjbectFactory(): ObjectFactory
+    public function getDomainObjectFactory(): DomainObjectFactory
     {
         return new UserObjectFactory();
     }
@@ -18,5 +18,20 @@ class UserPersistenceFactory extends PersistenceFactory
     public function getCollection(array $raw): Collection
     {
         return new UserCollection($raw, $this->getDomainObjectFactory());
+    }
+
+    public function getSelectionFactory(): SelectionFactory
+    {
+        return new UserSelectionFactory();
+    }
+
+    public function getUpdateFactory()
+    {
+        return new UserUpdateFactory();
+    }
+
+    public function getIdentityObject(): IdentityObject
+    {
+        return new UserIdentityObject();
     }
 }

@@ -7,7 +7,6 @@ require_once '/app/vendor/autoload.php';
 
 error_reporting(E_ALL);
 
-/*
 $reg = Registry::instance();
 $reg->setConf(new Conf(
     [
@@ -16,7 +15,25 @@ $reg->setConf(new Conf(
         'DB_PASSWD' => 'secret'
     ]
 ));
-*/
+
+$factory = PersistenceFactory::getFactory(User::class);
+$finder = new DomainObjectAssembler($factory);
+
+
+$user1 = new User(-1, "aaa");
+
+//$finder->insert($user1);
+
+$idobj = $factory->getIdentityObject()->field('name')->eq('aaa');
+
+$collection = $finder->find($idobj);
+
+foreach ($collection as $item) {
+    echo $item->getId() . ' | ';
+}
+
+var_dump($collection);
+
 
 /*
 // Update Factory pattern test
@@ -31,9 +48,7 @@ $uio->field('name')->eq('The Happy Hairband');
 
 $usf = new UserSelectionFactory();
 print_r($usf->newSelection($uio));
-*/
 
-/*
 // Identity Object
 
 // first test

@@ -9,7 +9,7 @@ abstract class PersistenceFactory
     abstract public function getDomainObjectFactory(): DomainObjectFactory;
     abstract public function getCollection(array $raw): Collection;
 
-    public static function getFactory($targetclass): PresistenceFactory
+    public static function getFactory($targetclass): PersistenceFactory
     {
         switch ($targetclass) {
             case Event::class:
