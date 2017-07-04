@@ -18,6 +18,25 @@ $reg->setConf(new Conf(
 ));
 */
 
+/*
+// Update Factory pattern test
+
+$uuf = new UserUpdateFactory();
+print_r($uuf->newUpdate(new User(334, "The Happy Hairband")));
+
+
+// Select Factory pattern test
+$uio = new UserIdentityObject();
+$uio->field('name')->eq('The Happy Hairband');
+
+$usf = new UserSelectionFactory();
+print_r($usf->newSelection($uio));
+*/
+
+/*
+// Identity Object
+
+// first test
 $idobj = new IdentityObject();
 $idobj->field("name")
     ->eq("The Good Show")
@@ -26,6 +45,7 @@ $idobj->field("name")
     ->lt(time() + (24 * 60 * 60));
 var_dump($idobj->getComps());
 
+// second test
 try {
     $idobj = new EventIdentityObject();
     $idobj->field("banana")
@@ -38,3 +58,4 @@ try {
 } catch (\Exception $e) {
     print $e->getMessage();
 }
+*/
