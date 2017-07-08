@@ -50,10 +50,4 @@ class Report extends DomainObject
     {
         return json_encode($this->data->serialize());
     }
-
-    public function getFinder(): Mapper
-    {
-        $reg = Registry::instance();
-        return $reg->getReportMapper();
-    }
 }

@@ -132,11 +132,19 @@ class ObjectWatcher
     public function performOperations()
     {
         foreach ($this->dirty as $key => $obj) {
-            $obj->getFinder()->update($obj);
+            $finder = new DomainObjectAssembler(
+                PersistenceFactory::getFactory(get_class($obj))
+            );
+
+            $finder->insert($obj);
         }
 
         foreach ($this->new as $key => $obj) {
-            $obj->getFinder()->insert($obj);
+            $finder = new DomainObjectAssembler(
+                PersistenceFactory::getFactory(get_class($obj))
+            );
+
+            $finder->insert($obj);
         }
 
         $this->dirty = [];

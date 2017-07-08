@@ -5,7 +5,7 @@ namespace App;
 
 class EventObjectFactory extends DomainObjectFactory
 {
-    public function createObect(array $row): DomainObject
+    public function createObject(array $row): DomainObject
     {
         $old = $this->getFromMap(Event::class, $row['id']);
 
@@ -15,7 +15,7 @@ class EventObjectFactory extends DomainObjectFactory
 
         $obj = new Event(
             (int)$row['id'],
-            $raw['name'],
+            $row['name'],
             (int)$row['start'],
             (int)$row['end'],
             $row['report']
@@ -23,9 +23,9 @@ class EventObjectFactory extends DomainObjectFactory
 
         $this->addToMap($obj);
 
-        // $reportmapper = new ReportMapper();
-        // $reportcollection = $reportmapper->findByEvent($raw['id']);
-        // $obj->setReports($reportcollection);
+        $reportmapper = new ReportMapper();
+        $reportcollection = $reportmapper->findByEvent($row['id']);
+        $obj->setReports($reportcollection);
 
         return $obj;
     }

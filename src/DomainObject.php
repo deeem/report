@@ -14,8 +14,6 @@ abstract class DomainObject
         }
     }
 
-    abstract public function getFinder(): Mapper;
-
     public function getId(): int
     {
         return $this->id;

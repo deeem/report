@@ -67,9 +67,8 @@ class Event extends DomainObject
     public function getReports(): ReportCollection
     {
         if (is_null($this->reports)) {
-            $reg = Registry::instance();
-            $finder = $reg->getReportMapper();
-            $this->reports = $finder->findByUser($this->getId());
+            $finder = new ReportMapper();
+            $this->reports = $finder->findByEvent($this->getId());
         }
         return $this->reports;
     }
@@ -83,11 +82,5 @@ class Event extends DomainObject
     {
         $this->getReports()->add($report);
         $report->setEvent($this);
-    }
-
-    public function getFinder(): Mapper
-    {
-        $reg = Registry::instance();
-        return $reg->getEventMapper();
     }
 }

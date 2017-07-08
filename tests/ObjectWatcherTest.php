@@ -36,15 +36,15 @@ class ObjectWatcherTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/objectWatcherDataSet.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
     }
 
-    public function testObjectWatcherAddToMap()
+    public function testAddToMap()
     {
         ObjectWatcher::reset();
 
         $mapper = new ReportMapper();
-        $mapper->find(1);
+        $report = $mapper->find(1);
 
         $watcher = ObjectWatcher::instance();
         $this->assertInstanceOf(User::class, $watcher::exists(User::class, 1));
@@ -52,7 +52,7 @@ class ObjectWatcherTest extends TestCase
         $this->assertInstanceOf(Report::class, $watcher::exists(Report::class, 1));
     }
 
-    public function testObjectWatcherGetFromMap()
+    public function testGetFromMap()
     {
         ObjectWatcher::reset();
 
@@ -73,14 +73,15 @@ class ObjectWatcherTest extends TestCase
     {
         ObjectWatcher::reset();
 
-        $reg = Registry::instance();
+        $eventmapper = new EventMapper();
+        $usermapper = new UserMapper();
 
         $report = new Report(
             -1,
             'J0200119',
             (new YamlReader('/app/tests/J0200119.yml'))->parse(),
-            $reg->getEventMapper()->find(1),
-            $reg->getUserMapper()->find(1)
+            $eventmapper->find(1),
+            $usermapper->find(1)
         );
 
         ObjectWatcher::instance()->performOperations();
@@ -89,7 +90,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('report', 'SELECT * FROM report');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/objectWatcherDataSet.Insert.xml'
+            dirname(__FILE__) . '/dataset.report.insert.xml'
         )->getTable('report');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -111,7 +112,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('report', 'SELECT * FROM report');
 
         $expectedReportTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/objectWatcherDataSet.Update.xml'
+            dirname(__FILE__) . '/dataset.watcher.update.xml'
         )->getTable('report');
 
         $this->assertTablesEqual($expectedReportTable, $queryReportTable);
@@ -120,9 +121,52 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedUserTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/objectWatcherDataSet.Update.xml'
+            dirname(__FILE__) . '/dataset.watcher.update.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedUserTable, $queryUserTable);
+    }
+
+    public function testInsertNewObjects1()
+    {
+        ObjectWatcher::reset();
+
+        $foo1 = new User(-1, 'foo1');
+        $foo2 = new User(-1, 'foo2');
+        $foo3 = new User(-1, 'foo3');
+
+        $finder = new DomainObjectAssembler(PersistenceFactory::getFactory(User::class));
+        $finder->insert($foo1);
+        $finder->insert($foo2);
+        $finder->insert($foo3);
+
+        $queryTable = $this->getConnection()
+        ->createQueryTable('user', 'SELECT * FROM user');
+
+        $expectedTable = $this->createXmlDataSet(
+            dirname(__FILE__) . '/dataset.watcher.insert.xml'
+        )->getTable('user');
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    public function testInsertNewObjects2()
+    {
+        ObjectWatcher::reset();
+
+        $foo1 = new User(-1, 'foo1');
+        $foo2 = new User(-1, 'foo2');
+        $foo3 = new User(-1, 'foo3');
+
+        ObjectWatcher::instance()->performOperations();
+
+        $queryTable = $this->getConnection()
+        ->createQueryTable('user', 'SELECT * FROM user');
+
+        $expectedTable = $this->createXmlDataSet(
+            dirname(__FILE__) . '/dataset.watcher.insert.xml'
+        )->getTable('user');
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
     }
 }

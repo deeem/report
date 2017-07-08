@@ -33,8 +33,7 @@ class User extends DomainObject
     public function getReports():ReportCollection
     {
         if (is_null($this->reports)) {
-            $reg = Registry::instance();
-            $finder = $reg->getReportMapper();
+            $finder =  new ReportMapper();
             $this->reports = $finder->findByUser($this->getId());
         }
         return $this->reports;
@@ -43,12 +42,6 @@ class User extends DomainObject
     public function addReport(Report $report)
     {
         $this->getReports()->add($report);
-        $report->setEvent($this);
-    }
-
-    public function getFinder(): Mapper
-    {
-        $reg = Registry::instance();
-        return $reg->getUserMapper();
+        $report->setUser($this);
     }
 }

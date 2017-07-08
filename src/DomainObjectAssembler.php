@@ -27,7 +27,7 @@ class DomainObjectAssembler
     {
         $collection = $this->find($idobj);
 
-        return $collection->next();
+        return $collection->current();
     }
 
     public function find(IdentityObject $idobj): Collection

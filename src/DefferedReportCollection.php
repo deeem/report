@@ -14,7 +14,7 @@ class DefferedReportCollection extends ReportCollection
         \PDOStatement $stmt_handle,
         array $valueArray
     ) {
-        parent::__construct(null, $dofact);
+        parent::__construct([], $dofact);
         $this->stmt = $stmt_handle;
         $this->valueArray = $valueArray;
     }

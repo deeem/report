@@ -35,7 +35,7 @@ class IdentityObject
     public function field(string $fieldname): self
     {
         if (! $this->isVoid() && $this->currentfield->isIncomplete()) {
-            throw new \Exception("Incomplete field");
+            throw new AppException("Incomplete field");
         }
 
         $this->enforceField($fieldname);
@@ -61,7 +61,7 @@ class IdentityObject
     {
         if (! in_array($fieldname, $this->enforce) && ! empty($this->enforce)) {
             $forcelist = implode(', ', $this->enforce);
-            throw new \Exception("{$fieldname} not a legal field ($forcelist)");
+            throw new AppException("{$fieldname} not a legal field ($forcelist)");
         }
     }
 
@@ -91,7 +91,7 @@ class IdentityObject
     private function operator(string $symbol, $value): self
     {
         if ($this->isVoid()) {
-            throw new \Exception("no object field defined");
+            throw new AppException("no object field defined");
         }
 
         $this->currentfield->addTest($symbol, $value);

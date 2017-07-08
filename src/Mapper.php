@@ -76,15 +76,6 @@ abstract class Mapper
         return $this->getFactory()->getCollection($raw);
     }
 
-    public function insert(DomainObject $obj)
-    {
-        $this->doInsert($obj);
-        $this->addToMap($obj);
-        $obj->markClean();
-    }
-
-    // abstract public function update(DomainObject $object);
-    abstract protected function doInsert(DomainObject $object);
     abstract protected function selectStmt(): \PDOStatement;
     abstract protected function selectAllStmt(): \PDOStatement;
     abstract protected function targetClass(): string;

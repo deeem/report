@@ -10,7 +10,7 @@ class EventPersistenceFactory extends PersistenceFactory
         return new EventMapper();
     }
 
-    public function getDomainObjectFactory(): ObjectFactory
+    public function getDomainObjectFactory(): DomainObjectFactory
     {
         return new EventObjectFactory();
     }
@@ -18,5 +18,20 @@ class EventPersistenceFactory extends PersistenceFactory
     public function getCollection(array $raw): Collection
     {
         return new EventCollection($raw, $this->getDomainObjectFactory());
+    }
+
+    public function getSelectionFactory(): SelectionFactory
+    {
+        return new EventSelectionFactory();
+    }
+
+    public function getUpdateFactory()
+    {
+        return new EventUpdateFactory();
+    }
+
+    public function getIdentityObject(): IdentityObject
+    {
+        return new EventIdentityObject();
     }
 }

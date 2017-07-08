@@ -36,55 +36,79 @@ class EventMapperTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/eventMapperDataSet.Empty.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
+    }
+
+    public function testGetReports()
+    {
+        $object = PersistenceFactory::getFactory(Event::class)->getMapper()->find(1);
+
+        $this->assertInstanceOf(Event::class, $object);
+        $this->assertInstanceOf(DefferedReportCollection::class, $object->getReports());
+    }
+
+    public function testFindById()
+    {
+        $object = PersistenceFactory::getFactory(Event::class)->getMapper()->find(1);
+
+        $this->assertEquals('J0200119', $object->getReport());
+    }
+
+    public function testFind()
+    {
+        $factory = PersistenceFactory::getFactory(Event::class);
+        $finder = new DomainObjectAssembler($factory);
+
+        $idobj = $factory->getIdentityObject()->field('report')->eq('J0200119');
+        $results = $finder->find($idobj);
+
+        $this->assertEquals(1, iterator_count($results));
+    }
+
+    public function testFindOne()
+    {
+        $factory = PersistenceFactory::getFactory(Event::class);
+        $finder = new DomainObjectAssembler($factory);
+
+        $idobj = $factory->getIdentityObject()->field('name')->eq('milestone (18.06)');
+        $result = $finder->findOne($idobj);
+
+        $this->assertEquals('milestone (18.06)', $result->getName());
     }
 
     public function testInsert()
     {
-        ObjectWatcher::reset();
+        $factory = PersistenceFactory::getFactory(Event::class);
+        $finder = new DomainObjectAssembler($factory);
 
-        $mapper = new EventMapper();
-        $object = new Event(-1, 'daily 18.06', '1806', '1906', 'A00201');
-        $mapper->insert($object);
+        $object = new Event(-1, 'milestone (18.06)', '1499595597793', '1499595653657', 'A0200119');
+        $finder->insert($object);
 
         $queryTable = $this->getConnection()
         ->createQueryTable('event', 'SELECT * FROM event');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/eventMapperDataSet.Insert.xml'
+            dirname(__FILE__) . '/dataset.event.insert.xml'
         )->getTable('event');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
 
-    public function testFind()
-    {
-        ObjectWatcher::reset();
-
-        $mapper = new EventMapper();
-
-        $mapper->insert(new Event(-1, 'daily 18.06', '1806', '1906', 'A00201'));
-        $object = $mapper->find(1);
-
-        $this->assertEquals('A00201', $object->getReport());
-    }
-
     public function testUpdate()
     {
-        ObjectWatcher::reset();
+        $factory = PersistenceFactory::getFactory(Event::class);
+        $finder = new DomainObjectAssembler($factory);
 
-        $mapper = new EventMapper();
-
-        $mapper->insert(new Event(-1, 'daily 18.06', '1806', '1906', 'A00201'));
-        $object = $mapper->find(1);
-        $object->setReport('B00201');
-        $mapper->update($object);
+        $idobj = $factory->getIdentityObject()->field('report')->eq('J0200119');
+        $obj = $finder->findOne($idobj);
+        $obj->setReport('A0200119');
+        $finder->insert($obj);
 
         $queryTable = $this->getConnection()
         ->createQueryTable('event', 'SELECT * FROM event');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/eventMapperDataSet.Update.xml'
+            dirname(__FILE__) . '/dataset.event.update.xml'
         )->getTable('event');
 
         $this->assertTablesEqual($expectedTable, $queryTable);

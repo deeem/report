@@ -21,6 +21,10 @@
             <value>1</value>
             <value>user1</value>
         </row>
+        <row>
+            <value>2</value>
+            <value>user2</value>
+        </row>
     </table>
     <table name="event">
         <column>id</column>
@@ -30,10 +34,10 @@
         <column>report</column>
         <row>
             <value>1</value>
-            <value>daily 18.06</value>
-            <value>1806</value>
-            <value>1906</value>
-            <value>A00201</value>
+            <value>milestone (18.06)</value>
+            <value>1499595597793</value>
+            <value>1499595653657</value>
+            <value>J0200119</value>
         </row>
     </table>
 </dataset>

@@ -16,61 +16,11 @@ $reg->setConf(new Conf(
     ]
 ));
 
-$factory = PersistenceFactory::getFactory(User::class);
-$finder = new DomainObjectAssembler($factory);
+$foo1 = new User(-1, 'foo1');
+$foo2 = new User(-1, 'foo2');
+$foo3 = new User(-1, 'foo3');
 
-
-$user1 = new User(-1, "aaa");
-
-//$finder->insert($user1);
-
-$idobj = $factory->getIdentityObject()->field('name')->eq('aaa');
-
-$collection = $finder->find($idobj);
-
-foreach ($collection as $item) {
-    echo $item->getId() . ' | ';
-}
-
-var_dump($collection);
-
-
-/*
-// Update Factory pattern test
-
-$uuf = new UserUpdateFactory();
-print_r($uuf->newUpdate(new User(334, "The Happy Hairband")));
-
-
-// Select Factory pattern test
-$uio = new UserIdentityObject();
-$uio->field('name')->eq('The Happy Hairband');
-
-$usf = new UserSelectionFactory();
-print_r($usf->newSelection($uio));
-
-// Identity Object
-
-// first test
-$idobj = new IdentityObject();
-$idobj->field("name")
-    ->eq("The Good Show")
-    ->field("start")
-    ->gt(time())
-    ->lt(time() + (24 * 60 * 60));
-var_dump($idobj->getComps());
-
-// second test
-try {
-    $idobj = new EventIdentityObject();
-    $idobj->field("banana")
-        ->eq("The Good Show")
-        ->field("start")
-        ->gt(time())
-        ->lt(time() + (24 * 60 * 60));
-
-    print $idobj;
-} catch (\Exception $e) {
-    print $e->getMessage();
-}
-*/
+$finder = new DomainObjectAssembler(PersistenceFactory::getFactory(User::class));
+$finder->insert($foo1);
+$finder->insert($foo2);
+$finder->insert($foo3);

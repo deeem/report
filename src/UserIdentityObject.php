@@ -9,7 +9,7 @@ class UserIdentityObject extends IdentityObject
     {
         parent::__construct(
             $field,
-            ['name', 'id']
+            ['id', 'name']
         );
     }
 }

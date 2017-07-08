@@ -14,7 +14,12 @@ class UserObjectFactory extends DomainObjectFactory
         }
 
         $obj = new User((int)$row['id'], $row['name']);
+
         $this->addToMap($obj);
+
+        $reportmapper = new ReportMapper();
+        $reportcollection = $reportmapper->findByUser($row['id']);
+        $obj->setReports($reportcollection);
 
         return $obj;
     }

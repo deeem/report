@@ -21,12 +21,12 @@ class ReportObjectFactory extends DomainObjectFactory
 
         $this->addToMap($obj);
 
-        // $usermapper = new UserMapper();
-        // $user = $usermapper->find((int)$raw['user']);
-        // $obj->setUser($user);
-        // $eventmapper = new EventMapper();
-        // $event = $eventmapper->find((int)$raw['event']);
-        // $obj->setEvent($event);
+        $usermapper = new UserMapper();
+        $user = $usermapper->find((int)$row['user']);
+        $obj->setUser($user);
+        $eventmapper = new EventMapper();
+        $event = $eventmapper->find((int)$row['event']);
+        $obj->setEvent($event);
 
         return $obj;
     }

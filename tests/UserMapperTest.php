@@ -36,55 +36,107 @@ class UserMapperTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/userMapperDataSet.Empty.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
     }
 
-    public function testInsert()
+    public function testGetReports()
     {
-        ObjectWatcher::reset();
+        $object = PersistenceFactory::getFactory(User::class)->getMapper()->find(1);
 
-        $mapper = new UserMapper();
-        $object = new User(-1, 'user1');
-        $mapper->insert($object);
-
-        $queryTable = $this->getConnection()
-        ->createQueryTable('user', 'SELECT * FROM user');
-
-        $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/userMapperDataSet.Insert.xml'
-        )->getTable('user');
-
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $this->assertInstanceOf(User::class, $object);
+        $this->assertInstanceOf(DefferedReportCollection::class, $object->getReports());
     }
 
-    public function testFind()
+    public function testFindById()
     {
-        ObjectWatcher::reset();
-
-        $mapper = new UserMapper();
-        $mapper->insert(new User(-1, 'user1'));
-        $object = $mapper->find(1);
+        $object = PersistenceFactory::getFactory(User::class)->getMapper()->find(1);
 
         $this->assertEquals('user1', $object->getName());
     }
 
-    public function testUpdate()
+    public function testFind()
     {
-        ObjectWatcher::reset();
+        $factory = PersistenceFactory::getFactory(User::class);
+        $finder = new DomainObjectAssembler($factory);
 
-        $mapper = new UserMapper();
-        $mapper->insert(new User(-1, 'user1'));
-        $object = $mapper->find(1);
-        $object->setName('user2');
-        $mapper->update($object);
+        $idobj = $factory->getIdentityObject()->field('name')->eq('user1');
+        $results = $finder->find($idobj);
+
+        $this->assertEquals(1, iterator_count($results));
+    }
+
+    public function testFindOne()
+    {
+        $factory = PersistenceFactory::getFactory(User::class);
+        $finder = new DomainObjectAssembler($factory);
+
+        $idobj = $factory->getIdentityObject()->field('name')->eq('user1');
+        $result = $finder->findOne($idobj);
+
+        $this->assertEquals('user1', $result->getName());
+    }
+
+    public function testInsert()
+    {
+        $factory = PersistenceFactory::getFactory(User::class);
+        $finder = new DomainObjectAssembler($factory);
+
+        $object = new User(-1, 'user2');
+        $finder->insert($object);
 
         $queryTable = $this->getConnection()
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/userMapperDataSet.Update.xml'
+            dirname(__FILE__) . '/dataset.user.insert.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    public function testUpdate()
+    {
+        $factory = PersistenceFactory::getFactory(User::class);
+        $finder = new DomainObjectAssembler($factory);
+
+        $idobj = $factory->getIdentityObject()->field('name')->eq('user1');
+        $obj = $finder->findOne($idobj);
+        $obj->setName('userOne');
+        $finder->insert($obj);
+
+        $queryTable = $this->getConnection()
+        ->createQueryTable('user', 'SELECT * FROM user');
+
+        $expectedTable = $this->createXmlDataSet(
+            dirname(__FILE__) . '/dataset.user.update.xml'
+        )->getTable('user');
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    public function testNotFoundById()
+    {
+        $object = PersistenceFactory::getFactory(User::class)->getMapper()->find(3);
+
+        $this->assertNull($object);
+    }
+
+    public function testNotFound()
+    {
+        $factory = PersistenceFactory::getFactory(User::class);
+        $finder = new DomainObjectAssembler($factory);
+
+        $idobj = $factory->getIdentityObject()->field('name')->eq('foo');
+        $results = $finder->find($idobj);
+
+        $this->assertEquals(0, iterator_count($results));
+    }
+
+    public function testBadSelectionQuery()
+    {
+        $this->expectException(AppException::class);
+
+        $idobj = new UserIdentityObject();
+        $idobj->field('name')->eq('1')->field('foo')->gt(time());
     }
 }
