@@ -16,11 +16,11 @@ $reg->setConf(new Conf(
     ]
 ));
 
-$foo1 = new User(-1, 'foo1');
-$foo2 = new User(-1, 'foo2');
-$foo3 = new User(-1, 'foo3');
+$foo1 = new DomainObject\User(-1, 'foo1');
+$foo2 = new DomainObject\User(-1, 'foo2');
+$foo3 = new DomainObject\User(-1, 'foo3');
 
-$finder = new DomainObjectAssembler(PersistenceFactory::getFactory(User::class));
+$finder = new DataMapper\DomainObjectAssembler(DataMapper\PersistenceFactory::getFactory(DomainObject\User::class));
 $finder->insert($foo1);
 $finder->insert($foo2);
 $finder->insert($foo3);

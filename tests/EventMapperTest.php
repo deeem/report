@@ -4,6 +4,13 @@ namespace App;
 use \PHPUnit\Framework\TestCase;
 use \PHPUnit\DbUnit\TestCaseTrait;
 
+use App\Registry;
+use App\Conf;
+use App\DomainObject\Event;
+use App\DataMapper\PersistenceFactory;
+use App\DataMapper\DefferedReportCollection;
+use App\DataMapper\DomainObjectAssembler;
+
 class EventMapperTest extends TestCase
 {
     use TestCaseTrait;
@@ -36,7 +43,7 @@ class EventMapperTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/fixture/dataset.initial.xml');
     }
 
     public function testGetReports()
@@ -88,7 +95,7 @@ class EventMapperTest extends TestCase
         ->createQueryTable('event', 'SELECT * FROM event');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.event.insert.xml'
+            dirname(__FILE__) . '/fixture/dataset.event.insert.xml'
         )->getTable('event');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -108,7 +115,7 @@ class EventMapperTest extends TestCase
         ->createQueryTable('event', 'SELECT * FROM event');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.event.update.xml'
+            dirname(__FILE__) . '/fixture/dataset.event.update.xml'
         )->getTable('event');
 
         $this->assertTablesEqual($expectedTable, $queryTable);

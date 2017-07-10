@@ -4,6 +4,19 @@ namespace App;
 use \PHPUnit\Framework\TestCase;
 use \PHPUnit\DbUnit\TestCaseTrait;
 
+use App\Registry;
+use App\Conf;
+use App\YamlReader;
+use App\DomainObject\Event;
+use App\DomainObject\Report;
+use App\DomainObject\User;
+use App\DataMapper\ObjectWatcher;
+use App\DataMapper\EventMapper;
+use App\DataMapper\ReportMapper;
+use App\DataMapper\UserMapper;
+use App\DataMapper\PersistenceFactory;
+use App\DataMapper\DomainObjectAssembler;
+
 class ObjectWatcherTest extends TestCase
 {
     use TestCaseTrait;
@@ -36,7 +49,7 @@ class ObjectWatcherTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/fixture/dataset.initial.xml');
     }
 
     public function testAddToMap()
@@ -90,7 +103,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('report', 'SELECT * FROM report');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.report.insert.xml'
+            dirname(__FILE__) . '/fixture/dataset.report.insert.xml'
         )->getTable('report');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -112,7 +125,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('report', 'SELECT * FROM report');
 
         $expectedReportTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.watcher.update.xml'
+            dirname(__FILE__) . '/fixture/dataset.watcher.update.xml'
         )->getTable('report');
 
         $this->assertTablesEqual($expectedReportTable, $queryReportTable);
@@ -121,7 +134,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedUserTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.watcher.update.xml'
+            dirname(__FILE__) . '/fixture/dataset.watcher.update.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedUserTable, $queryUserTable);
@@ -144,7 +157,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.watcher.insert.xml'
+            dirname(__FILE__) . '/fixture/dataset.watcher.insert.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -164,7 +177,7 @@ class ObjectWatcherTest extends TestCase
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.watcher.insert.xml'
+            dirname(__FILE__) . '/fixture/dataset.watcher.insert.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);

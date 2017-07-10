@@ -1,6 +1,17 @@
 <?php
 declare(strict_types=1);
+
 namespace App;
+
+use App\AppException;
+use App\Unit\AccumulationFactory;
+use App\Unit\Accumulation;
+use App\Unit\Component;
+use App\Unit\Input;
+use App\Unit\Select;
+use App\Unit\Template;
+use App\Unit\Summary;
+use App\Unit\Percentage;
 
 final class AccumulationFactoryTest extends \PHPUnit\Framework\TestCase
 {

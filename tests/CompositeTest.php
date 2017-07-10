@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
+
 namespace App;
+
+use App\Unit\UnitException;
+use App\Unit\Accumulation;
+use App\Unit\Input;
+use App\Unit\Select;
+use App\Unit\Template;
 
 final class CompositeTest extends \PHPUnit\Framework\TestCase
 {
@@ -58,7 +65,7 @@ final class CompositeTest extends \PHPUnit\Framework\TestCase
         $inner->addChild(new Input('22305e2b'));
         $this->collection->addChild($inner);
 
-        $this->expectException(CellException::class);
+        $this->expectException(UnitException::class);
         $this->collection->findNested(['eeb9eda1', 'foo']);
     }
 

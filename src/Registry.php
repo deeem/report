@@ -59,34 +59,4 @@ class Registry
 
         return $this->pdo;
     }
-
-    public function getEventMapper()
-    {
-        return new EventMapper();
-    }
-
-    public function getReportMapper()
-    {
-        return new ReportMapper();
-    }
-
-    public function getUserMapper()
-    {
-        return new UserMapper();
-    }
-
-    public function getEventCollection()
-    {
-        return new EventCollection();
-    }
-
-    public function getReportCollection()
-    {
-        return new ReportCollection();
-    }
-
-    public function getUserCollection()
-    {
-        return new UserCollection();
-    }
 }

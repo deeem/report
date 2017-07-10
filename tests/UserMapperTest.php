@@ -4,6 +4,15 @@ namespace App;
 use \PHPUnit\Framework\TestCase;
 use \PHPUnit\DbUnit\TestCaseTrait;
 
+use App\Registry;
+use App\Conf;
+use App\AppException;
+use App\DomainObject\User;
+use App\DataMapper\DefferedReportCollection;
+use App\DataMapper\PersistenceFactory;
+use App\DataMapper\DomainObjectAssembler;
+use App\DataMapper\UserIdentityObject;
+
 class UserMapperTest extends TestCase
 {
     use TestCaseTrait;
@@ -36,7 +45,7 @@ class UserMapperTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/fixture/dataset.initial.xml');
     }
 
     public function testGetReports()
@@ -88,7 +97,7 @@ class UserMapperTest extends TestCase
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.user.insert.xml'
+            dirname(__FILE__) . '/fixture/dataset.user.insert.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -108,7 +117,7 @@ class UserMapperTest extends TestCase
         ->createQueryTable('user', 'SELECT * FROM user');
 
         $expectedTable = $this->createXmlDataSet(
-            dirname(__FILE__) . '/dataset.user.update.xml'
+            dirname(__FILE__) . '/fixture/dataset.user.update.xml'
         )->getTable('user');
 
         $this->assertTablesEqual($expectedTable, $queryTable);

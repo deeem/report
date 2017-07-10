@@ -4,6 +4,16 @@ namespace App;
 use \PHPUnit\Framework\TestCase;
 use \PHPUnit\DbUnit\TestCaseTrait;
 
+use App\Registry;
+use App\Conf;
+use App\YamlReader;
+use App\DomainObject\Event;
+use App\DomainObject\Report;
+use App\DomainObject\User;
+use App\DataMapper\ObjectWatcher;
+use App\DataMapper\PersistenceFactory;
+use App\DataMapper\DomainObjectAssembler;
+
 class ReportMapperTest extends TestCase
 {
     use TestCaseTrait;
@@ -36,7 +46,7 @@ class ReportMapperTest extends TestCase
 
     public function getDataSet()
     {
-        return $this->createXmlDataSet(dirname(__FILE__) . '/dataset.initial.xml');
+        return $this->createXmlDataSet(dirname(__FILE__) . '/fixture/dataset.initial.xml');
     }
 
     public function testCreateObject()
@@ -100,7 +110,7 @@ class ReportMapperTest extends TestCase
         $queryTable = $this->getConnection()
         ->createQueryTable('report', 'SELECT * FROM report');
 
-        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/dataset.report.insert.xml')
+        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/fixture/dataset.report.insert.xml')
         ->getTable("report");
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -122,7 +132,7 @@ class ReportMapperTest extends TestCase
         $queryTable = $this->getConnection()
         ->createQueryTable('report', 'SELECT * FROM report');
 
-        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/dataset.report.update.xml')
+        $expectedTable = $this->createXmlDataSet(dirname(__FILE__) . '/fixture/dataset.report.update.xml')
         ->getTable("report");
 
         $this->assertTablesEqual($expectedTable, $queryTable);
