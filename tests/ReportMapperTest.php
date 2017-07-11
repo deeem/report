@@ -6,7 +6,7 @@ use \PHPUnit\DbUnit\TestCaseTrait;
 
 use App\Registry;
 use App\Conf;
-use App\YamlReader;
+use App\ReportFactory;
 use App\DomainObject\Event;
 use App\DomainObject\Report;
 use App\DomainObject\User;
@@ -91,21 +91,13 @@ class ReportMapperTest extends TestCase
     {
         ObjectWatcher::reset();
 
-        $user = PersistenceFactory::getFactory(User::class)->getMapper()->find(1);
-        $event = PersistenceFactory::getFactory(Event::class)->getMapper()->find(1);
-
-        $rfactory = PersistenceFactory::getFactory(Report::class);
-        $rfinder = new DomainObjectAssembler($rfactory);
-
-        $report = new Report(
-            -1,
-            'J0200119',
-            (new YamlReader('/app/tests/J0200119.yml'))->parse(),
-            $event,
-            $user
+        $finder = new DomainObjectAssembler(
+            PersistenceFactory::getFactory(Report::class)
         );
 
-        $rfinder->insert($report);
+        $report = (new ReportFactory('J0200119', 1, 1))->make();
+
+        $finder->insert($report);
 
         $queryTable = $this->getConnection()
         ->createQueryTable('report', 'SELECT * FROM report');

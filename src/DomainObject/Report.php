@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DomainObject;
 
-use App\Unit\AccumulationFactory;
+use App\Unit\Accumulation;
 
 class Report extends DomainObject
 {
@@ -12,13 +12,13 @@ class Report extends DomainObject
     private $user;
     public $data;
 
-    public function __construct(int $id, $name, array $data, Event $event = null, User $user = null)
+    public function __construct(int $id, $name, Accumulation $data, Event $event = null, User $user = null)
     {
         parent::__construct($id);
         $this->name = $name;
         $this->event = $event;
         $this->user = $user;
-        $this->data = (new AccumulationFactory())->make($data);
+        $this->data = $data;
     }
 
     public function getName()

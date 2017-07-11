@@ -6,7 +6,7 @@ use \PHPUnit\DbUnit\TestCaseTrait;
 
 use App\Registry;
 use App\Conf;
-use App\YamlReader;
+use App\ReportFactory;
 use App\DomainObject\Event;
 use App\DomainObject\Report;
 use App\DomainObject\User;
@@ -86,16 +86,7 @@ class ObjectWatcherTest extends TestCase
     {
         ObjectWatcher::reset();
 
-        $eventmapper = new EventMapper();
-        $usermapper = new UserMapper();
-
-        $report = new Report(
-            -1,
-            'J0200119',
-            (new YamlReader('/app/tests/J0200119.yml'))->parse(),
-            $eventmapper->find(1),
-            $usermapper->find(1)
-        );
+        $report = (new ReportFactory('J0200119', 1, 1))->make();
 
         ObjectWatcher::instance()->performOperations();
 

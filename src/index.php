@@ -16,11 +16,16 @@ $reg->setConf(new Conf(
     ]
 ));
 
-$foo1 = new DomainObject\User(-1, 'foo1');
-$foo2 = new DomainObject\User(-1, 'foo2');
-$foo3 = new DomainObject\User(-1, 'foo3');
+$factory = new ReportFactory('J0200119', 1, 1);
+$report = $factory->make();
+var_dump($report);
 
-$finder = new DataMapper\DomainObjectAssembler(DataMapper\PersistenceFactory::getFactory(DomainObject\User::class));
-$finder->insert($foo1);
-$finder->insert($foo2);
-$finder->insert($foo3);
+
+// $foo1 = new DomainObject\User(-1, 'foo1');
+// $foo2 = new DomainObject\User(-1, 'foo2');
+// $foo3 = new DomainObject\User(-1, 'foo3');
+//
+// $finder = new DataMapper\DomainObjectAssembler(DataMapper\PersistenceFactory::getFactory(DomainObject\User::class));
+// $finder->insert($foo1);
+// $finder->insert($foo2);
+// $finder->insert($foo3);
