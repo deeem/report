@@ -7,6 +7,7 @@ use App\Unit\UnitException;
 use App\Unit\Accumulation;
 use App\Unit\Input;
 use App\Unit\Select;
+use App\Unit\Checkbox;
 use App\Unit\Summary;
 use App\Unit\Percentage;
 
@@ -39,6 +40,13 @@ final class PrimitiveTest extends \PHPUnit\Framework\TestCase
         $select->setOptions(['foo', 'bar']);
         $this->expectException(UnitException::class);
         $select->setValue('baz');
+    }
+
+    public function testCheckboxSetGetValue()
+    {
+        $checkbox = new Checkbox('5d84e373');
+        $checkbox->setValue(true);
+        $this->assertTrue($checkbox->getValue());
     }
 
     public function testSummaryGetValue()
